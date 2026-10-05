@@ -1,23 +1,68 @@
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
-</html>
+---
+import "../styles/global.css";
+import {
+  defaultLang,
+  getIntlLocale,
+  getRouteUrl,
+  locales,
+  useTranslations,
+  type Lang,
+  type RouteId,
+} from "../i18n/utils";
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+interface Props {
+  lang: Lang;
+  route?: RouteId;
+  title?: string;
+  description?: string;
+}
+
+const { lang, route = "home" } = Astro.props;
+const t = useTranslations(lang);
+const title = Astro.props.title ?? t.meta.title;
+const description = Astro.props.description ?? t.meta.description;
+
+// Canonical and hreflang URLs need an absolute origin (`site` in astro.config.mjs).
+const alternates = Astro.site
+  ? locales.map((code) => ({ hreflang: code, href: getRouteUrl(route, code) }))
+  : [];
+const canonical = alternates.find((alt) => alt.hreflang === lang)?.href;
+const xDefault = alternates.find((alt) => alt.hreflang === defaultLang)?.href;
+---
+
+<!doctype html>
+<html lang={getIntlLocale(lang)}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#0B2239" />
+    <meta name="color-scheme" content="light" />
+    <meta name="generator" content={Astro.generator} />
+
+    <link rel="icon" type="image/svg+xml" href="/assets/icons/electrolink-icon.svg" />
+    <link rel="preload" href="/assets/fonts/exo2-regular.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/assets/fonts/exo2-bold.woff2" as="font" type="font/woff2" crossorigin />
+
+    {canonical && <link rel="canonical" href={canonical} />}
+    {alternates.map((alt) => <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />)}
+    {xDefault && <link rel="alternate" hreflang="x-default" href={xDefault} />}
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ElectroLink" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:locale" content={t.meta.ogLocale} />
+    {canonical && <meta property="og:url" content={canonical} />}
+  </head>
+  <body class="min-h-dvh">
+    <a
+      href="#main"
+      class="fixed top-3 left-3 z-100 -translate-y-24 rounded-lg bg-surface px-4 py-3 font-semibold text-primary transition-transform focus:translate-y-0"
+    >
+      {t.a11y.skipToContent}
+    </a>
+    <slot />
+  </body>
+</html>

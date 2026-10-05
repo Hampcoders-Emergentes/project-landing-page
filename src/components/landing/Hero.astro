@@ -1,0 +1,59 @@
+---
+import Icon from "../ui/Icon.astro";
+import TelemetryPreview from "./TelemetryPreview.astro";
+import { siteConfig } from "../../config";
+import { useTranslations, type Lang } from "../../i18n/utils";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang).hero;
+---
+
+<section aria-labelledby="hero-title" class="relative isolate overflow-hidden bg-background-dark text-surface">
+  <div
+    class="bg-grid-dark pointer-events-none absolute inset-0 -z-10 mask-[radial-gradient(ellipse_at_70%_40%,black_20%,transparent_75%)]"
+    aria-hidden="true"
+  >
+  </div>
+
+  <div
+    class="container-page grid items-center gap-12 py-14 sm:py-20 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-16 lg:py-28"
+  >
+    <div class="flex flex-col gap-7 motion-safe:animate-fade-in-up">
+      <h1
+        id="hero-title"
+        class="text-[2.125rem] leading-[1.1] font-bold tracking-tight text-balance sm:text-5xl lg:text-[3.375rem]"
+      >
+        {t.titleLead}<span class="text-accent">{t.titleHighlight}</span>.
+      </h1>
+      <p class="max-w-xl text-lg leading-relaxed text-pretty text-on-dark-muted sm:text-xl">{t.subtitle}</p>
+
+      <div class="flex flex-col gap-3 xs:flex-row xs:flex-wrap">
+        <a href="#contact" class="btn btn-primary btn-lg">
+          <Icon name="calendar-event" />
+          {t.ctaDemo}
+        </a>
+        <a href={siteConfig.webAppUrl} data-webapp-link class="btn btn-ghost-dark btn-lg">
+          {t.ctaApp}
+          <Icon name="arrow-right" />
+        </a>
+      </div>
+
+      <ul class="flex flex-col gap-3 border-t border-dark-raised pt-6 text-sm text-on-dark sm:flex-row sm:flex-wrap sm:gap-x-6">
+        <li class="flex items-center gap-2">
+          <Icon name="shield-check" />
+          {t.trust.auditReady}
+        </li>
+        <li class="flex items-center gap-2">
+          <Icon name="cpu" />
+          {t.trust.nonInvasive}
+        </li>
+      </ul>
+    </div>
+
+    <TelemetryPreview lang={lang} class="motion-safe:animate-fade-in-up motion-safe:animate-delay-150" />
+  </div>
+</section>

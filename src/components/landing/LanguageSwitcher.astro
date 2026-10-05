@@ -1,0 +1,51 @@
+---
+import { getRoutePath, languages, locales, useTranslations, type Lang, type RouteId } from "../../i18n/utils";
+
+interface Props {
+  lang: Lang;
+  route?: RouteId;
+  class?: string;
+}
+
+const { lang, route = "home", class: className } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<nav aria-label={t.a11y.languageNav} class:list={[className]}>
+  <ul class="flex items-center gap-0.5 rounded-lg border border-border-dark p-0.5">
+    {
+      locales.map((code) => {
+        const current = code === lang;
+        return (
+          <li>
+            <a
+              href={getRoutePath(route, code)}
+              hreflang={code}
+              lang={code}
+              aria-current={current ? "true" : undefined}
+              data-lang-link
+              class="flex min-h-10 min-w-11 items-center justify-center rounded-md px-2.5 text-sm font-semibold text-on-dark uppercase transition-colors hover:text-surface aria-current:bg-surface aria-current:text-background-dark"
+            >
+              <span aria-hidden="true">{code}</span>
+              <span class="sr-only">
+                {languages[code]}
+                {current && ` ${t.a11y.currentLanguage}`}
+              </span>
+            </a>
+          </li>
+        );
+      })
+    }
+  </ul>
+</nav>
+
+<script>
+  // Keep the visitor on the same section when switching language.
+  document.addEventListener("click", (event) => {
+    const link = (event.target as Element | null)?.closest<HTMLAnchorElement>("a[data-lang-link]");
+    if (!link || !location.hash) return;
+    const url = new URL(link.href);
+    url.hash = location.hash;
+    link.href = url.href;
+  });
+</script>

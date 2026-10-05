@@ -1,0 +1,761 @@
+{
+  "meta": {
+    "title": "ElectroLink · Real-time electrical safety for fast-food kitchens",
+    "description": "IoT electrical monitoring for fast-food chains: ground-fault alarms during wet cleaning, fewer breaker trips at rush hour and the energy cost of every appliance in soles.",
+    "ogLocale": "en_US"
+  },
+  "a11y": {
+    "skipToContent": "Skip to main content",
+    "primaryNav": "Main",
+    "languageNav": "Language",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "currentLanguage": "(current language)",
+    "currentPage": "(current page)",
+    "contactLinks": "Contact and resources"
+  },
+  "nav": {
+    "platform": "Platform",
+    "roles": "Roles",
+    "problem": "Problem",
+    "safety": "Safety",
+    "management": "Management",
+    "ecosystem": "Ecosystem",
+    "pricing": "Plans",
+    "contact": "Contact",
+    "login": "Log in",
+    "requestDemo": "Request demo"
+  },
+  "notices": {
+    "webApp": {
+      "checking": "Connecting to the web app…",
+      "title": "The web app isn't responding",
+      "body": "We couldn't reach the ElectroLink web app. You can keep browsing this page and try again in a moment.",
+      "retry": "Try again",
+      "dismiss": "Dismiss"
+    },
+    "offline": {
+      "title": "You're offline",
+      "body": "Content that has already loaded stays available. We'll reconnect automatically.",
+      "retry": "Retry connection",
+      "checking": "Checking connection…",
+      "stillOffline": "Still offline. Check your connection and try again."
+    },
+    "limited": {
+      "title": "Limited connectivity",
+      "body": "We're showing the essential content. Animations and live previews are paused to save data.",
+      "dismiss": "Got it"
+    },
+    "restored": "Connection restored."
+  },
+  "hero": {
+    "titleLead": "Real-time IoT electrical monitoring and safety intelligence for ",
+    "titleHighlight": "fast-food chains",
+    "subtitle": "Prevent shock hazards during wet floor cleaning, eliminate kitchen downtime, and audit kilowatt costs per appliance.",
+    "ctaDemo": "Request demo",
+    "ctaApp": "Access web app",
+    "trust": {
+      "auditReady": "Audit-ready records for SUNAFIL, INDECI and OSINERGMIN",
+      "nonInvasive": "Non-invasive install, no rewiring"
+    },
+    "preview": {
+      "caption": "Simulated readings from a kitchen panel: 0 mA ground-fault leakage, a stable 220 V supply and a live sensor link.",
+      "panel": "Kitchen panel · Line 2",
+      "live": "Live",
+      "sensors": "12/12 sensors",
+      "leakage": "Ground-fault leakage",
+      "safeCircuit": "Safe circuit",
+      "tripThreshold": "Trip threshold 30 mA",
+      "voltage": "Supply voltage",
+      "stable": "Stable",
+      "nominal": "Nominal 220 V · 60 Hz",
+      "trend": "Voltage · last 60 s",
+      "equipment": "Equipment",
+      "ok": "OK",
+      "warning": "Warning",
+      "items": {
+        "fryer": "Fryer 01",
+        "grill": "Grill plate",
+        "cooler": "Walk-in cooler"
+      },
+      "path": {
+        "panel": "Panel",
+        "gateway": "Edge gateway",
+        "cloud": "Cloud"
+      },
+      "simulated": "Simulated data"
+    }
+  },
+  "problems": {
+    "eyebrow": "The problem",
+    "title": "Water, heat and high-load circuits share the same few square meters.",
+    "intro": "Fast-food kitchens run some of the most electrically demanding operations in retail, yet most stores have no live view of what happens inside their breaker panels.",
+    "consequenceLabel": "Consequence",
+    "cards": {
+      "electrocution": {
+        "title": "Electrocution risk during night mopping",
+        "body": "Crews mop and hose floors around fryers, grills and panels with no way of knowing whether a circuit is leaking current.",
+        "consequence": "Serious injuries to staff and direct legal liability for the store.",
+        "tag": "Critical hazard"
+      },
+      "breakerTrips": {
+        "title": "Breaker trips in the middle of the rush",
+        "body": "Undetected faults build up until a breaker trips at lunch or dinner peak and takes a whole line down.",
+        "consequence": "Lost sales, wasted food and orders piling up.",
+        "tag": "Downtime risk"
+      },
+      "energyWaste": {
+        "title": "Unmonitored equipment inflating the bill",
+        "body": "One utility bill for the whole store and no visibility per appliance, so idle or failing equipment quietly drives costs up.",
+        "consequence": "Higher energy bills every month with no clear cause.",
+        "tag": "Abnormal draw"
+      },
+      "audits": {
+        "title": "Labor audits and liability",
+        "body": "Without traceable electrical safety records, inspections by SUNAFIL and INDECI are hard to pass.",
+        "consequence": "Fines or a temporary store closure.",
+        "tag": "Regulatory exposure"
+      }
+    }
+  },
+  "safety": {
+    "eyebrow": "For the kitchen crew",
+    "title": "Know a station is safe before anyone touches it.",
+    "intro": "Clear, touch-friendly signals at every station: early warnings when something changes and simple protocols for the moments that matter.",
+    "edgeCaseLabel": "Edge case",
+    "tryInteractive": "Try the interactive station screen",
+    "clean": {
+      "title": "Safe-to-Clean protocol",
+      "body": "One tap before the washdown. Each wet zone is checked for isolation and leakage, and the screen only gives the go-ahead when every zone passes. Every check is logged for audits.",
+      "screenTitle": "Safe-to-Clean check",
+      "progress": "4/4 zones",
+      "zones": {
+        "fryers": "Fryer bank circuits isolated",
+        "grill": "Grill and griddle zone",
+        "floor": "Floor-level outlets",
+        "ground": "Panel ground continuity"
+      },
+      "groundOk": "OK",
+      "status": "Safe to clean",
+      "logged": "Logged 23:41 · night crew"
+    },
+    "alarm": {
+      "title": "Instant multi-sensory alarms",
+      "body": "A ground fault turns the station screen red, sounds a buzzer and names the machine to avoid. The supervisor gets an SMS at the same moment.",
+      "status": "Ground fault",
+      "headline": "Step away",
+      "machine": "Fryer 02 · 18 mA leakage",
+      "instruction": "Do not touch the fryer bank or the surrounding floor.",
+      "channels": {
+        "screen": "Screen",
+        "buzzer": "Buzzer",
+        "sms": "SMS to supervisor"
+      },
+      "note": "The alarm fires before the breaker's 30 mA trip point, so the crew is warned first."
+    },
+    "pause": {
+      "title": "30-second cleaning pause",
+      "body": "Touch input locks for 30 seconds so greasy screens can be wiped without triggering anything. Safety alarms stay active the whole time.",
+      "screenTitle": "Screen paused for cleaning",
+      "locked": "Touch input locked · alarms active",
+      "start": "Try the 30-second pause",
+      "stop": "Stop demo",
+      "started": "Cleaning pause started: 30 seconds.",
+      "ended": "Cleaning pause finished. Touch input is active again."
+    },
+    "offline": {
+      "title": "When a sensor goes silent",
+      "body": "No data never means safe. If a sensor stops reporting, the machine is flagged as unmonitored and must be treated as energized.",
+      "status": "No signal",
+      "headline": "Unmonitored equipment — Do not touch",
+      "machine": "Ice machine · last reading 23:39",
+      "instruction": "Treat it as energized until the signal returns.",
+      "recommendation": "Report it to your store manager so a certified technician can check the sensor."
+    }
+  },
+  "management": {
+    "eyebrow": "For store managers",
+    "title": "Energy costs, incidents and compliance in one dashboard.",
+    "intro": "See what every machine costs in soles, catch equipment left running after closing and keep maintenance on schedule with certified technicians.",
+    "benefits": {
+      "costs": {
+        "title": "Cost per machine in soles",
+        "body": "Each circuit is metered separately and converted with your tariff, so you know which equipment drives the bill."
+      },
+      "idle": {
+        "title": "Off-hours idle detection",
+        "body": "Load after closing is compared with the store schedule to flag equipment that should have been switched off."
+      },
+      "sla": {
+        "title": "SLA-tracked maintenance",
+        "body": "Every fault opens an incident with an SLA clock and a work order for a certified technician."
+      },
+      "continuity": {
+        "title": "Operational continuity",
+        "body": "Early warnings let you fix faults off-peak instead of losing a line at rush hour."
+      }
+    },
+    "cta": "Open the manager dashboard",
+    "ctaNote": "Already a customer? Log in to see your stores.",
+    "tryInteractive": "Explore the interactive dashboard",
+    "dashboard": {
+      "caption": "Manager dashboard preview with sample data for one store.",
+      "store": "Store #014 · Miraflores",
+      "period": "This month",
+      "kpis": {
+        "energy": "Energy cost",
+        "idle": "Off-hours idle",
+        "incidents": "Open incidents"
+      },
+      "idleSub": "3 machines left running",
+      "incidentsSub": "1 awaiting dispatch",
+      "costTitle": "Cost by machine",
+      "idleTitle": "Left running after closing",
+      "idleWindow": "23:00–06:00, last night",
+      "idleBadge": "Idle load",
+      "machines": {
+        "fryerBank": "Fryer bank",
+        "grill": "Grill & griddle",
+        "cooler": "Walk-in cooler",
+        "hood": "Hood & HVAC",
+        "ice": "Ice machine",
+        "fryer02": "Fryer 02",
+        "toaster": "Toaster conveyor",
+        "heatLamp": "Heat lamp 3"
+      },
+      "slaTitle": "Maintenance SLA",
+      "incidents": {
+        "inc2291": {
+          "title": "Fryer 02 · insulation wear",
+          "assignee": "Certified electrician",
+          "state": "Awaiting dispatch",
+          "sla": "SLA 02:47 left"
+        },
+        "inc2288": {
+          "title": "Walk-in cooler above 6 °C",
+          "assignee": "Refrigeration technician",
+          "state": "Assigned",
+          "sla": "SLA 05:10 left"
+        }
+      },
+      "threshold": {
+        "title": "Combi oven 01 · threshold not configured",
+        "body": "Until someone confirms its limits, this machine runs on the safe default: an alarm at 30 mA of leakage. It stays protected and flagged in the dashboard.",
+        "badge": "Pending configuration"
+      }
+    }
+  },
+  "ecosystem": {
+    "eyebrow": "Connected IoT & RPA ecosystem",
+    "title": "From breaker panel to action in three steps.",
+    "intro": "Sensors measure, the edge gateway decides locally, and software robots handle the follow-up.",
+    "stepLabel": "Step",
+    "steps": {
+      "clamps": {
+        "title": "Non-invasive clamp sensors",
+        "body": "Split-core current, leakage and temperature clamps snap onto existing circuits in the breaker panel. No rewiring, no service interruption.",
+        "tags": ["Current & leakage", "Temperature"]
+      },
+      "edge": {
+        "title": "Edge telemetry sync",
+        "body": "The gateway streams readings to the cloud in real time and keeps alarms, screens and logs working locally if the internet drops.",
+        "tags": ["Real-time stream", "Local buffer"]
+      },
+      "rpa": {
+        "title": "Automated RPA dispatch",
+        "body": "Software robots open work orders, dispatch certified technicians and fall back to SMS when the primary channel fails.",
+        "items": {
+          "workOrders": "Work-order dispatch",
+          "sms": "SMS failover alerts",
+          "reports": "Regulatory report compilation"
+        }
+      }
+    },
+    "cycle": {
+      "title": "How an alert is generated",
+      "steps": {
+        "measure": {
+          "title": "Measure",
+          "body": "Clamps sample current, leakage and temperature continuously."
+        },
+        "evaluate": {
+          "title": "Evaluate",
+          "body": "The gateway compares each reading with the machine's threshold."
+        },
+        "alert": {
+          "title": "Alert",
+          "body": "Station screens and buzzers react locally, without waiting for the cloud."
+        },
+        "act": {
+          "title": "Act",
+          "body": "The platform logs the event and RPA opens the work order."
+        }
+      }
+    },
+    "offline": {
+      "status": "Disconnected",
+      "title": "Fryer bank sensor · platform link lost",
+      "body": "Readings are stored temporarily on the edge gateway and uploaded automatically when the connection returns, so the record has no gaps. Local alarms keep working meanwhile.",
+      "buffer": "Buffering locally",
+      "synced": "Last sync 23:39"
+    },
+    "webApp": "See live telemetry in the web app"
+  },
+  "pricing": {
+    "eyebrow": "Plans & compliance",
+    "title": "Sized for one store or a whole chain.",
+    "intro": "Every plan includes shock-prevention alarms and the Safe-to-Clean protocol. Hardware installation is quoted per site.",
+    "recommended": "Recommended for franchises",
+    "perMonth": "/ month",
+    "perStoreMonth": "/ store / month",
+    "custom": "Custom",
+    "annual": "annual agreement",
+    "featuresLabel": "What's included",
+    "unavailable": {
+      "title": "Pricing temporarily unavailable",
+      "body": "We couldn't load this plan's price.",
+      "cta": "Request a quote"
+    },
+    "plans": {
+      "single": {
+        "name": "Single Store",
+        "description": "For independent franchises that need immediate shock prevention and basic telemetry.",
+        "cta": "Start with Single Store",
+        "features": [
+          "Instant shock-prevention alarms",
+          "Safe-to-Clean protocol and pause mode",
+          "Basic real-time telemetry",
+          "SMS failover alerts"
+        ]
+      },
+      "multi": {
+        "name": "Multi-Unit Franchise",
+        "description": "For operators running 5+ stores who need one view across every kitchen.",
+        "cta": "Choose Multi-Unit",
+        "features": [
+          "Everything in Single Store",
+          "Centralized multi-store dashboard",
+          "Machine-level energy analytics in soles",
+          "Automated shift-closing logs",
+          "Off-hours idle-load detection"
+        ]
+      },
+      "enterprise": {
+        "name": "Enterprise Corporate",
+        "description": "For national chains that need integration, governance and audit automation.",
+        "cta": "Talk to sales",
+        "features": [
+          "Everything in Multi-Unit",
+          "Custom API integration (ERP, CMMS)",
+          "Corporate SLA management",
+          "Automated regulatory audit generation",
+          "Priority emergency support line"
+        ]
+      }
+    },
+    "dossier": {
+      "title": "Audit-ready dossiers in one click",
+      "body": "Export time-stamped safety logs, leakage tests, Safe-to-Clean records and incident histories, formatted for SUNAFIL, INDECI and OSINERGMIN inspections.",
+      "filesLabel": "Download a sample",
+      "files": [
+        {
+          "title": "Safety log · September 2026",
+          "href": "/assets/docs/electrolink-safety-log-sample-en.pdf",
+          "format": "PDF"
+        },
+        {
+          "title": "Inspection dossier · Store #014",
+          "href": "/assets/docs/electrolink-inspection-dossier-sample-en.pdf",
+          "format": "PDF"
+        }
+      ],
+      "download": "Download",
+      "sampleNote": "Sample files with fictitious data.",
+      "cta": "Get one built from your own data"
+    },
+    "customer": {
+      "text": "Already a customer?",
+      "cta": "Log in to the web app"
+    }
+  },
+  "contact": {
+    "eyebrow": "Request a demo",
+    "title": "See ElectroLink running in your own kitchen.",
+    "intro": "Tell us about your locations and we'll schedule an on-site demonstration with a certified technician.",
+    "steps": {
+      "review": {
+        "title": "We review your sites",
+        "body": "Kitchen layout, panel types and the equipment you want covered."
+      },
+      "pilot": {
+        "title": "On-site pilot installation",
+        "body": "A technician installs clamps and a gateway on selected circuits."
+      },
+      "walkthrough": {
+        "title": "Live walkthrough with your team",
+        "body": "Crew screens, the manager dashboard and an audit dossier built from your own data."
+      }
+    },
+    "emergency": {
+      "label": "Existing customer with an active fault?",
+      "line": "24/7 technical line"
+    },
+    "form": {
+      "title": "Schedule a demonstration",
+      "required": "All fields are required.",
+      "fields": {
+        "name": {
+          "label": "Full name",
+          "placeholder": "e.g. María Torres"
+        },
+        "email": {
+          "label": "Corporate email",
+          "placeholder": "name@company.com",
+          "hint": "Use your company address so we can verify your chain."
+        },
+        "chain": {
+          "label": "Restaurant chain name",
+          "placeholder": "e.g. Brasa Express S.A.C."
+        },
+        "locations": {
+          "label": "Number of locations",
+          "placeholder": "Select an option",
+          "options": [
+            { "value": "1", "label": "1 location" },
+            { "value": "2-4", "label": "2–4 locations" },
+            { "value": "5-19", "label": "5–19 locations" },
+            { "value": "20-49", "label": "20–49 locations" },
+            { "value": "50+", "label": "50+ locations" }
+          ]
+        },
+        "phone": {
+          "label": "Phone",
+          "placeholder": "987 654 321",
+          "hint": "Mobile (9 digits) or landline with its area code."
+        }
+      },
+      "consent": {
+        "before": "I agree to be contacted about ElectroLink and accept the ",
+        "link": "privacy policy",
+        "after": "."
+      },
+      "honeypot": "Leave this field empty",
+      "submit": "Request demo",
+      "sending": "Sending your request…",
+      "sendingShort": "Sending…"
+    },
+    "errors": {
+      "summary": "Please review these fields:",
+      "name": {
+        "required": "Enter your full name.",
+        "invalid": "Use at least 2 letters, without numbers or symbols."
+      },
+      "email": {
+        "required": "Enter your corporate email.",
+        "invalid": "Enter a valid email address, e.g. name@company.com."
+      },
+      "chain": {
+        "required": "Enter your restaurant chain name.",
+        "invalid": "Use at least 2 characters."
+      },
+      "locations": {
+        "required": "Select how many locations you operate."
+      },
+      "phone": {
+        "required": "Enter a phone number.",
+        "invalid": "Enter a 9-digit mobile (e.g. 987 654 321) or a landline with its area code (e.g. 01 234 5678)."
+      },
+      "consent": {
+        "required": "Accept the privacy policy so we can contact you."
+      }
+    },
+    "failure": {
+      "title": "We couldn't complete your request",
+      "body": "The registration service didn't respond. Your details are still in the form, so you can try again in a moment.",
+      "retry": "Try again"
+    },
+    "success": {
+      "title": "Request received",
+      "body": "Thanks! A specialist will contact you to schedule your on-site demonstration. Meanwhile, you can explore the web app.",
+      "cta": "Open the web app",
+      "again": "Send another request"
+    }
+  },
+  "footer": {
+    "tagline": "IoT electrical safety and energy intelligence for fast-food kitchens.",
+    "by": "A product by Hampcoders",
+    "emergency": "24/7 emergency technical support",
+    "columns": {
+      "platform": "Platform",
+      "resources": "Resources",
+      "legal": "Legal"
+    },
+    "links": {
+      "docs": "Documentation",
+      "webApp": "Web app",
+      "contact": "Contact",
+      "status": "System status",
+      "privacy": "Privacy policy",
+      "terms": "Terms of service",
+      "segments": "Interactive demo"
+    },
+    "status": {
+      "label": "System status",
+      "checking": "Checking",
+      "operational": "Operational",
+      "degraded": "Degraded",
+      "disruption": "Service disruption",
+      "unknown": "Unavailable"
+    },
+    "iconLinks": {
+      "email": "Email sales",
+      "phone": "Call the 24/7 technical line",
+      "docs": "Documentation",
+      "status": "System status",
+      "webApp": "Web app"
+    },
+    "disclaimer": "ElectroLink monitoring complements, but does not replace, certified electrical installations, residual-current protection devices and the periodic inspections required by Peruvian regulations (OSINERGMIN, INDECI, SUNAFIL). Alarm thresholds must be validated by a licensed electrical engineer for each site.",
+    "rights": "All rights reserved.",
+    "sample": "Telemetry and dashboard figures on this page are sample data."
+  },
+  "segments": {
+    "meta": {
+      "title": "ElectroLink · Kitchen crew and store manager views",
+      "description": "Try the ElectroLink station screen for kitchen crews and explore the store manager dashboard: Safe-to-Clean checks, ground-fault alarms, energy costs in soles and SLA dispatch."
+    },
+    "breadcrumb": {
+      "label": "Breadcrumb",
+      "home": "Overview",
+      "current": "Roles"
+    },
+    "hero": {
+      "titleLead": "See ElectroLink through the eyes of ",
+      "titleHighlight": "each role",
+      "intro": "Switch between the kitchen crew and the store manager. Everything below is interactive: run scenarios on the station screen or explore the manager dashboard."
+    },
+    "switcher": {
+      "label": "Choose a role",
+      "crew": {
+        "title": "Kitchen Crew",
+        "subtitle": "Operators & cleaning staff"
+      },
+      "manager": {
+        "title": "Store Manager",
+        "subtitle": "Managers & OHS leads"
+      }
+    },
+    "crew": {
+      "eyebrow": "Kitchen crew",
+      "title": "Try what the crew sees on the station screen.",
+      "intro": "Pick a moment of the shift. The touchscreen reacts the way it would in a real kitchen.",
+      "scenariosLabel": "Shift moments",
+      "scenarios": {
+        "live": {
+          "title": "Normal shift",
+          "hint": "Live telemetry while the line runs",
+          "tag": "Real-time telemetry",
+          "infoTitle": "Everything green, nothing to think about",
+          "infoBody": "Leakage stays at 0 mA and every machine shows its status. The crew only needs to look up when something changes."
+        },
+        "clean": {
+          "title": "Run Safe-to-Clean",
+          "hint": "Before the night floor washdown",
+          "tag": "Safe-to-Clean protocol",
+          "infoTitle": "One tap before the washdown",
+          "infoBody": "Each wet zone is checked for isolation and leakage. Only when every zone passes does the screen give the go-ahead, and the check is logged for audits."
+        },
+        "alarm": {
+          "title": "Ground-fault emergency",
+          "hint": "Leakage detected on a fryer",
+          "tag": "Emergency alarm",
+          "infoTitle": "Warned before touching the machine",
+          "infoBody": "A ground fault turns the screen red, sounds a buzzer and names the machine to avoid. The supervisor and a technician are alerted at the same time."
+        },
+        "pause": {
+          "title": "Pause screen 30 s",
+          "hint": "Wipe the display without triggering inputs",
+          "tag": "30-second pause mode",
+          "infoTitle": "Wipe the screen without accidents",
+          "infoBody": "Touch input is locked for 30 seconds so greasy screens can be cleaned. Safety alarms keep working during the pause."
+        },
+        "offline": {
+          "title": "Sensor loses signal",
+          "hint": "Edge case: unmonitored machine",
+          "tag": "Edge case · lost signal",
+          "infoTitle": "No data never means safe",
+          "infoBody": "If a sensor stops reporting, the machine is flagged as unmonitored and must be treated as energized until the signal returns."
+        }
+      },
+      "screen": {
+        "label": "Simulated kitchen station screen",
+        "panel": "Kitchen panel · Line 2",
+        "live": "IoT live",
+        "sensorsAll": "12/12 sensors",
+        "sensorsDegraded": "11/12 sensors",
+        "time": "23:41",
+        "leakage": "Ground-fault leakage",
+        "safeCircuit": "Safe circuit",
+        "tripThreshold": "Trip threshold 30 mA",
+        "equipment": "Equipment status",
+        "ok": "OK",
+        "warning": "Warning",
+        "items": {
+          "fryer01": "Fryer 01",
+          "fryer02": "Fryer 02",
+          "grill": "Grill plate",
+          "cooler": "Walk-in cooler",
+          "ice": "Ice machine"
+        },
+        "clean": {
+          "title": "Safe-to-Clean verification",
+          "zonesLabel": "zones",
+          "checking": "Checking…",
+          "zones": [
+            { "label": "Fryer bank circuits isolated", "value": "0 mA" },
+            { "label": "Grill and griddle zone", "value": "0 mA" },
+            { "label": "Floor-level outlets (wet zone)", "value": "0 mA" },
+            { "label": "Main panel ground continuity", "value": "OK" }
+          ],
+          "status": "Safe to clean",
+          "done": "Safe to start the floor washdown",
+          "logged": "Logged · night crew · 23:41"
+        },
+        "alarm": {
+          "status": "Ground fault",
+          "headline": "Step away",
+          "machine": "Fryer 02 · 18 mA leakage",
+          "instruction": "Do not touch the fryer bank or the surrounding floor. The supervisor and a technician have been notified.",
+          "threshold": "Early alarm: the breaker trips at 30 mA.",
+          "ack": "I am clear of the area",
+          "isolated": "Fryer 02 isolated · Do not touch",
+          "isolatedBody": "It stays locked until a certified technician clears it.",
+          "isolatedBadge": "Isolated",
+          "incident": "Incident",
+          "incidentValue": "INC-2291 opened 23:41",
+          "supervisor": "Supervisor",
+          "supervisorValue": "Notified on screen and by SMS",
+          "restOfLine": "Rest of the line",
+          "restValue": "0 mA",
+          "safe": "Safe"
+        },
+        "pause": {
+          "title": "Screen paused for cleaning",
+          "body": "Touch input is disabled. Alarms stay active."
+        },
+        "offline": {
+          "status": "No signal",
+          "headline": "Unmonitored equipment — Do not touch",
+          "body": "The ice machine sensor lost signal at 23:39. Treat the machine as energized.",
+          "monitored": "Monitored",
+          "offline": "Offline",
+          "fallback": "Fallback SMS sent to the shift supervisor. The gateway retries every 10 s.",
+          "recommendation": "Report it to your store manager so a technician can check the sensor."
+        }
+      }
+    },
+    "manager": {
+      "eyebrow": "Store manager",
+      "title": "Explore the manager dashboard.",
+      "intro": "Switch the period and unit, open each tab, and act on incidents and thresholds.",
+      "period": {
+        "label": "Period",
+        "week": "Week",
+        "month": "Month",
+        "thisWeek": "This week",
+        "thisMonth": "This month"
+      },
+      "unit": {
+        "label": "Unit",
+        "soles": "Soles (S/)",
+        "kwh": "kWh"
+      },
+      "store": "Store #014 · Miraflores",
+      "kpis": {
+        "energy": "Energy",
+        "idle": "Off-hours idle",
+        "incidents": "Open incidents",
+        "idleSub": "3 machines left running",
+        "incidentsPending": "1 awaiting dispatch",
+        "incidentsAssigned": "All assigned to technicians"
+      },
+      "tabsLabel": "Dashboard sections",
+      "tabs": {
+        "costs": "Cost by machine",
+        "idle": "Idle load",
+        "incidents": "Incidents",
+        "thresholds": "Thresholds"
+      },
+      "pendingBadge": "pending",
+      "costs": {
+        "total": "Total"
+      },
+      "idle": {
+        "window": "Load after closing (23:00–06:00), last night",
+        "chartLabel": "Hourly load after closing",
+        "hour": "Hour",
+        "load": "Load",
+        "allNight": "all night",
+        "wasted": "Wasted",
+        "alert": "Alert me at closing time",
+        "alertOn": "Closing alert scheduled for 23:15."
+      },
+      "incidents": {
+        "inc2291": {
+          "title": "Fryer 02 · insulation wear (18 mA event)",
+          "sla": "SLA 02:47 left",
+          "awaiting": "Awaiting dispatch · requires a certified electrician",
+          "dispatch": "Dispatch technician",
+          "dispatched": "Technician dispatched.",
+          "workOrder": "Work order WO-1182 created automatically."
+        },
+        "inc2288": {
+          "title": "Walk-in cooler above the 6 °C threshold",
+          "state": "Assigned · SLA 05:10"
+        }
+      },
+      "thresholds": {
+        "configured": "Configured",
+        "rows": [
+          { "name": "Fryer bank", "value": "30 mA · 40 A" },
+          { "name": "Grill & griddle", "value": "30 mA · 32 A" },
+          { "name": "Walk-in cooler", "value": "6 °C max" }
+        ],
+        "pendingName": "Combi oven 01",
+        "pendingBody": "No threshold set · running on the safe default (30 mA)",
+        "pendingBadge": "Pending configuration",
+        "apply": "Apply recommended",
+        "appliedValue": "30 mA · 25 A",
+        "applied": "Recommended threshold applied to Combi oven 01."
+      },
+      "why": {
+        "costs": {
+          "tag": "Cost per machine",
+          "title": "Energy translated into soles",
+          "body": "Each circuit is metered separately and converted with your tariff, so you can see which equipment drives the bill."
+        },
+        "idle": {
+          "tag": "Off-hours detection",
+          "title": "Find machines left running overnight",
+          "body": "ElectroLink compares load after closing with the store schedule and flags equipment that should have been switched off."
+        },
+        "incidents": {
+          "tag": "SLA-driven dispatch",
+          "title": "Faults become assigned work",
+          "body": "Incidents open automatically with an SLA clock. Dispatching creates a work order for a certified technician through the RPA flow."
+        },
+        "thresholds": {
+          "tag": "Threshold fallbacks",
+          "title": "Unconfigured never means unprotected",
+          "body": "Machines without a custom threshold run on a safe default and stay flagged until someone confirms the right values."
+        }
+      },
+      "sample": "Figures shown are sample data for a single store."
+    },
+    "cta": {
+      "title": "Ready to see it in your own kitchen?",
+      "body": "A certified technician installs a pilot kit and walks your crew and managers through both views.",
+      "demo": "Request demo",
+      "app": "Access web app"
+    }
+  }
+}

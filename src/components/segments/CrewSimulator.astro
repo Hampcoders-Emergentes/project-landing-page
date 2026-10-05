@@ -1,0 +1,272 @@
+---
+import Icon from "../ui/Icon.astro";
+import StatusBadge from "../ui/StatusBadge.astro";
+import type { IconName } from "../ui/icon-names";
+import { crewEquipment } from "../../data/landing";
+import { formatNumber, useTranslations, type Lang } from "../../i18n/utils";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang).segments.crew;
+const s = t.screen;
+
+type ScenarioId = keyof typeof t.scenarios;
+
+const scenarios: { id: ScenarioId; icon: IconName; tile: string }[] = [
+  { id: "live", icon: "wave-saw-tool", tile: "bg-success-soft text-success" },
+  { id: "clean", icon: "droplet", tile: "bg-primary-soft text-primary" },
+  { id: "alarm", icon: "alert-octagon", tile: "bg-danger-soft text-danger" },
+  { id: "pause", icon: "player-pause", tile: "bg-subtle text-text-primary" },
+  { id: "offline", icon: "wifi-off", tile: "bg-subtle text-text-secondary" },
+];
+
+const infos = Object.fromEntries(
+  scenarios.map(({ id }) => [
+    id,
+    { tag: t.scenarios[id].tag, title: t.scenarios[id].infoTitle, body: t.scenarios[id].infoBody },
+  ]),
+);
+
+const reading = (value: number, unit: string) => `${formatNumber(lang, value, 1)} ${unit}`;
+
+const cardClass = "rounded-xl border border-border bg-surface p-4";
+const labelClass = "text-xs font-semibold tracking-wider text-text-secondary uppercase";
+---
+
+<div
+  class="grid gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:items-start lg:gap-12"
+  data-crew-simulator
+  data-infos={JSON.stringify(infos)}
+>
+  <div class="flex flex-col gap-6">
+    <div class="flex flex-col gap-3">
+      <p class="eyebrow text-primary">{t.eyebrow}</p>
+      <h2 id="crew-title" class="text-3xl leading-tight font-bold tracking-tight text-balance">{t.title}</h2>
+      <p class="leading-relaxed text-text-secondary">{t.intro}</p>
+    </div>
+
+    <fieldset class="flex flex-col gap-2.5">
+      <legend class="sr-only">{t.scenariosLabel}</legend>
+      {
+        scenarios.map(({ id, icon, tile }) => (
+          <label class="flex min-h-16 cursor-pointer items-center gap-3.5 rounded-xl border border-border bg-surface px-3.5 py-3 transition-colors hover:border-primary has-checked:border-primary has-checked:bg-primary-soft has-checked:shadow-[inset_0_0_0_1px_var(--color-primary)] has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-primary">
+            <input type="radio" name="crew-scenario" value={id} checked={id === "live"} class="sr-only" />
+            <span class:list={["flex size-10 shrink-0 items-center justify-center rounded-lg", tile]}>
+              <Icon name={icon} />
+            </span>
+            <span class="flex flex-col">
+              <span class="font-semibold">{t.scenarios[id].title}</span>
+              <span class="text-sm text-text-secondary">{t.scenarios[id].hint}</span>
+            </span>
+          </label>
+        ))
+      }
+    </fieldset>
+
+    <div class="flex flex-col gap-2 rounded-xl border border-border bg-surface p-5" aria-live="polite" aria-atomic="true">
+      <span class="self-start rounded-md bg-primary-soft px-2.5 py-1 text-xs font-semibold text-primary-dark" data-info-tag>
+        {infos.live.tag}
+      </span>
+      <p class="text-lg font-semibold" data-info-title>{infos.live.title}</p>
+      <p class="text-sm leading-relaxed text-text-secondary" data-info-body>{infos.live.body}</p>
+    </div>
+  </div>
+
+  <!-- Station touchscreen -->
+  <figure class="m-0 rounded-[1.375rem] border border-border-dark bg-background-dark p-2.5 shadow-[0_32px_64px_-28px_rgb(11_34_57/0.55)] sm:p-3">
+    <figcaption class="sr-only">{s.label}</figcaption>
+    <div class="flex min-h-[30rem] flex-col overflow-hidden rounded-xl bg-surface">
+      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-border px-4 py-3">
+        <p class="flex items-center gap-2 text-sm font-semibold">
+          <Icon name="device-mobile" class="text-primary" />
+          {s.panel}
+        </p>
+        <div class="flex items-center gap-3">
+          <span
+            class="inline-flex items-center gap-2 rounded-full border border-border bg-background px-2.5 py-1 text-xs font-semibold text-text-secondary"
+            data-chip="all"
+          >
+            <span class="size-2 rounded-full bg-accent" aria-hidden="true"></span>
+            <span class="uppercase">{s.live}</span>
+            <span aria-hidden="true">·</span>
+            <span class="tnum">{s.sensorsAll}</span>
+          </span>
+          <span hidden data-chip="degraded">
+            <StatusBadge size="sm" status="offline" label={s.sensorsDegraded} />
+          </span>
+          <span class="tnum text-sm font-semibold text-text-secondary">{s.time}</span>
+        </div>
+      </div>
+
+      <!-- Normal shift -->
+      <div data-screen="live" class="grid flex-1 content-start gap-3 bg-background p-3 sm:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] sm:p-4">
+        <div class:list={[cardClass, "flex flex-col gap-3"]}>
+          <p class={labelClass}>{s.leakage}</p>
+          <p class="flex items-baseline gap-1.5 text-success">
+            <span class="tnum text-6xl leading-none font-bold">0</span>
+            <span class="text-2xl font-semibold">mA</span>
+          </p>
+          <StatusBadge status="success" label={s.safeCircuit} class="self-start" />
+          <p class="text-xs text-text-secondary">{s.tripThreshold}</p>
+        </div>
+        <div class={cardClass}>
+          <p class={labelClass}>{s.equipment}</p>
+          <ul class="mt-1 divide-y divide-subtle">
+            {
+              crewEquipment.map((item) => (
+                <li class="flex flex-wrap items-center gap-x-3 gap-y-1 py-2.5">
+                  <span class="min-w-0 flex-1 text-sm font-semibold">{s.items[item.id]}</span>
+                  <span class="tnum text-sm text-text-secondary">{reading(item.value, item.unit)}</span>
+                  <StatusBadge size="sm" status={item.status} label={item.status === "success" ? s.ok : s.warning} />
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+
+      <!-- Safe-to-Clean -->
+      <div hidden data-screen="clean" class="flex flex-1 flex-col gap-4 bg-background p-4 sm:p-5">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <p class="text-lg font-bold">{s.clean.title}</p>
+          <span class="tnum rounded-md border border-border bg-surface px-2 py-0.5 text-xs font-semibold">
+            <span data-clean-count>0</span>/{s.clean.zones.length} {s.clean.zonesLabel}
+          </span>
+        </div>
+        <ul class="divide-y divide-subtle rounded-xl border border-border bg-surface">
+          {
+            s.clean.zones.map((zone, index) => (
+              <li class="flex items-center gap-3 px-4 py-3" data-zone={index}>
+                <span class="flex size-5 items-center justify-center text-text-secondary" data-zone-pending>
+                  <Icon name="loader-2" size={18} class="motion-safe:animate-spin" />
+                </span>
+                <Icon name="check" class="hidden text-success" data-zone-done />
+                <span class="min-w-0 flex-1 text-sm font-medium">{zone.label}</span>
+                <span
+                  class="tnum text-sm text-text-secondary"
+                  data-zone-value
+                  data-pending={s.clean.checking}
+                  data-done={zone.value}
+                >
+                  {s.clean.checking}
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+        <div hidden data-clean-done class="flex flex-col gap-2 rounded-xl border border-success bg-success-soft p-4">
+          <StatusBadge status="success" label={s.clean.status} class="self-start" />
+          <p class="font-bold">{s.clean.done}</p>
+          <p class="text-sm text-text-secondary">{s.clean.logged}</p>
+        </div>
+      </div>
+
+      <!-- Ground-fault alarm -->
+      <div
+        hidden
+        data-screen="alarm"
+        role="alert"
+        class="flex flex-1 flex-col items-center justify-center gap-3 bg-danger p-6 text-center text-surface sm:p-8"
+      >
+        <Icon name="alert-octagon" size={56} />
+        <p class="text-2xl font-bold tracking-wide uppercase sm:text-3xl">{s.alarm.status} · {s.alarm.headline}</p>
+        <p class="tnum text-lg font-semibold">{s.alarm.machine}</p>
+        <p class="max-w-md leading-relaxed">{s.alarm.instruction}</p>
+        <p class="text-sm font-medium">{s.alarm.threshold}</p>
+        <button
+          type="button"
+          class="mt-2 min-h-13 cursor-pointer rounded-lg border-2 border-surface bg-surface px-7 font-bold text-danger transition-colors hover:bg-danger-soft"
+          data-alarm-ack
+        >
+          {s.alarm.ack}
+        </button>
+      </div>
+
+      <!-- Alarm acknowledged -->
+      <div hidden tabindex="-1" data-screen="alarm-ack" class="flex flex-1 flex-col gap-4 bg-background p-4 focus:outline-none sm:p-5">
+        <div class="flex flex-wrap items-start gap-3 rounded-xl border-2 border-danger bg-surface p-4">
+          <Icon name="lock" size={24} class="mt-0.5 text-danger" />
+          <div class="min-w-0 flex-1 basis-56">
+            <p class="font-bold text-danger">{s.alarm.isolated}</p>
+            <p class="text-sm text-text-secondary">{s.alarm.isolatedBody}</p>
+          </div>
+          <StatusBadge size="sm" status="danger" label={s.alarm.isolatedBadge} />
+        </div>
+        <dl class="divide-y divide-subtle rounded-xl border border-border bg-surface px-4 text-sm">
+          <div class="flex flex-wrap justify-between gap-2 py-3">
+            <dt class="text-text-secondary">{s.alarm.incident}</dt>
+            <dd class="tnum font-semibold">{s.alarm.incidentValue}</dd>
+          </div>
+          <div class="flex flex-wrap justify-between gap-2 py-3">
+            <dt class="text-text-secondary">{s.alarm.supervisor}</dt>
+            <dd class="font-semibold">{s.alarm.supervisorValue}</dd>
+          </div>
+          <div class="flex flex-wrap items-center justify-between gap-2 py-3">
+            <dt class="text-text-secondary">{s.alarm.restOfLine}</dt>
+            <dd class="flex items-center gap-2">
+              <span class="tnum font-semibold">{s.alarm.restValue}</span>
+              <StatusBadge size="sm" status="success" label={s.alarm.safe} />
+            </dd>
+          </div>
+        </dl>
+      </div>
+
+      <!-- 30-second cleaning pause -->
+      <div
+        hidden
+        data-screen="pause"
+        class="flex flex-1 flex-col items-center justify-center gap-4 bg-background-dark p-8 text-center text-surface"
+      >
+        <Icon name="player-pause" size={44} class="text-on-dark" />
+        <p class="tnum text-6xl leading-none font-bold" data-pause-display>0:30</p>
+        <p class="text-lg font-semibold">{s.pause.title}</p>
+        <p class="flex items-center gap-2 text-sm text-on-dark">
+          <Icon name="lock" size={16} />
+          {s.pause.body}
+        </p>
+        <div class="h-1.5 w-full max-w-xs overflow-hidden rounded-full bg-border-dark" aria-hidden="true">
+          <div class="h-full origin-left rounded-full bg-surface transition-transform duration-1000 ease-linear" data-pause-progress>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sensor without signal (US03 · scenario 2) -->
+      <div hidden data-screen="offline" class="flex flex-1 flex-col gap-4 bg-background p-4 sm:p-5">
+        <div role="status" class="flex flex-col gap-2 rounded-xl border-2 border-dashed border-offline bg-subtle p-4">
+          <StatusBadge status="offline" label={s.offline.status} class="self-start" />
+          <p class="text-lg font-bold text-balance">{s.offline.headline}</p>
+          <p class="text-sm text-text-secondary">{s.offline.body}</p>
+        </div>
+        <ul class="divide-y divide-subtle rounded-xl border border-border bg-surface px-4">
+          <li class="flex flex-wrap items-center gap-3 py-2.5">
+            <span class="min-w-0 flex-1 text-sm font-semibold">{s.items.fryer01}</span>
+            <StatusBadge size="sm" status="success" label={s.offline.monitored} />
+          </li>
+          <li class="flex flex-wrap items-center gap-3 py-2.5">
+            <span class="min-w-0 flex-1 text-sm font-semibold">{s.items.grill}</span>
+            <StatusBadge size="sm" status="success" label={s.offline.monitored} />
+          </li>
+          <li class="flex flex-wrap items-center gap-3 py-2.5">
+            <span class="min-w-0 flex-1 text-sm font-semibold">{s.items.ice}</span>
+            <StatusBadge size="sm" status="offline" label={s.offline.offline} />
+          </li>
+        </ul>
+        <p class="text-sm text-text-secondary">{s.offline.fallback}</p>
+        <div class="flex gap-3 rounded-lg border border-border bg-surface p-3 text-sm leading-relaxed">
+          <Icon name="message" class="mt-0.5 text-primary" />
+          <p>{s.offline.recommendation}</p>
+        </div>
+      </div>
+    </div>
+  </figure>
+</div>
+
+<script>
+  import { initCrewSimulator } from "../../scripts/crew-simulator";
+
+  const root = document.querySelector<HTMLElement>("[data-crew-simulator]");
+  if (root) initCrewSimulator(root);
+</script>

@@ -1,0 +1,269 @@
+---
+import Icon from "../ui/Icon.astro";
+import Logo from "../ui/Logo.astro";
+import type { IconName } from "../ui/icon-names";
+import LanguageSwitcher from "./LanguageSwitcher.astro";
+import { siteConfig } from "../../config";
+import { getRoutePath, sectionHref, useTranslations, type Lang, type RouteId } from "../../i18n/utils";
+
+interface Props {
+  lang: Lang;
+  route?: RouteId;
+}
+
+const { lang, route = "home" } = Astro.props;
+const t = useTranslations(lang);
+
+interface NavItem {
+  id: string;
+  label: string;
+  hint?: string;
+  icon: IconName;
+  href: string;
+  /** `data-nav-link` (landing scrollspy) or `data-role-link` (role switcher) on the page that owns the target. */
+  attrs: Record<string, string>;
+}
+
+interface NavGroup {
+  id: string;
+  label: string;
+  page: RouteId;
+  items: NavItem[];
+}
+
+const onSegments = route === "segments";
+const segmentsPath = getRoutePath("segments", lang);
+
+const groups: NavGroup[] = [
+  {
+    id: "platform",
+    label: t.nav.platform,
+    page: "home",
+    items: (
+      [
+        { id: "problem", label: t.nav.problem, icon: "alert-triangle" },
+        { id: "safety", label: t.nav.safety, icon: "shield-check" },
+        { id: "management", label: t.nav.management, icon: "chart-bar" },
+        { id: "ecosystem", label: t.nav.ecosystem, icon: "broadcast" },
+        { id: "pricing", label: t.nav.pricing, icon: "premium-rights" },
+        { id: "contact", label: t.nav.contact, icon: "calendar-event" },
+      ] as const
+    ).map((item) => ({
+      ...item,
+      href: sectionHref(route, lang, item.id),
+      attrs: route === "home" ? { "data-nav-link": item.id } : {},
+    })),
+  },
+  {
+    id: "roles",
+    label: t.nav.roles,
+    page: "segments",
+    items: (
+      [
+        { id: "crew", label: t.segments.switcher.crew.title, hint: t.segments.switcher.crew.subtitle, icon: "chef-hat" },
+        {
+          id: "manager",
+          label: t.segments.switcher.manager.title,
+          hint: t.segments.switcher.manager.subtitle,
+          icon: "building-store",
+        },
+      ] as const
+    ).map((item) => ({
+      ...item,
+      href: onSegments ? `#${item.id}` : `${segmentsPath}#${item.id}`,
+      attrs: onSegments ? { "data-role-link": item.id } : {},
+    })),
+  },
+];
+---
+
+<header class="sticky top-0 z-50 border-b border-dark-raised bg-background-dark text-surface">
+  <div class="container-page flex h-16 items-center gap-3 lg:h-18">
+    <a
+      href={getRoutePath("home", lang)}
+      class="flex min-h-11 items-center gap-2.5 rounded-md text-lg font-bold tracking-tight text-surface"
+    >
+      <Logo size={34} />
+      <span>ElectroLink</span>
+    </a>
+
+    <!-- Desktop: one dropdown per page -->
+    <nav aria-label={t.a11y.primaryNav} class="ml-auto hidden md:block">
+      <ul class="flex items-center gap-1">
+        {
+          groups.map((group) => {
+            const isCurrentPage = group.page === route;
+            return (
+              <li class="relative" data-dropdown>
+                <button
+                  type="button"
+                  aria-expanded="false"
+                  aria-controls={`nav-${group.id}`}
+                  data-dropdown-toggle
+                  class:list={[
+                    "group relative inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-md px-3 text-[0.9375rem] font-semibold transition-colors hover:text-surface aria-expanded:bg-dark-raised aria-expanded:text-surface",
+                    isCurrentPage ? "text-surface" : "text-on-dark",
+                  ]}
+                >
+                  {group.label}
+                  {isCurrentPage && <span class="sr-only">{t.a11y.currentPage}</span>}
+                  <Icon name="chevron-down" size={16} class="transition-transform group-aria-expanded:rotate-180" />
+                  {isCurrentPage && (
+                    <span class="absolute inset-x-3 bottom-0.5 h-0.5 rounded-full bg-primary" aria-hidden="true" />
+                  )}
+                </button>
+                <div
+                  id={`nav-${group.id}`}
+                  hidden
+                  data-dropdown-panel
+                  class="absolute top-full left-0 mt-2 w-72 rounded-xl border border-border bg-surface p-2 text-text-primary shadow-[0_24px_48px_-16px_rgb(11_34_57/0.45)]"
+                >
+                  <ul class="flex flex-col gap-0.5">
+                    {group.items.map((item) => (
+                      <li>
+                        <a
+                          href={item.href}
+                          {...item.attrs}
+                          class="group/item flex items-center gap-3 rounded-lg px-2.5 py-2 transition-colors hover:bg-subtle aria-current:bg-primary-soft"
+                        >
+                          <span class="flex size-9 shrink-0 items-center justify-center rounded-md bg-subtle text-primary group-aria-current/item:bg-primary group-aria-current/item:text-surface">
+                            <Icon name={item.icon} size={18} />
+                          </span>
+                          <span class="flex min-w-0 flex-col">
+                            <span class="text-sm font-semibold group-aria-current/item:text-primary-dark">{item.label}</span>
+                            {item.hint && <span class="text-xs text-text-secondary">{item.hint}</span>}
+                          </span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </nav>
+
+    <div class="ml-auto flex items-center gap-2 md:ml-4">
+      <LanguageSwitcher lang={lang} route={route} class="hidden sm:block" />
+      <a href={siteConfig.webAppUrl} data-webapp-link class="btn btn-ghost-dark min-h-11 px-3 text-sm sm:px-4">
+        <Icon name="login-2" size={18} />
+        <span class="sr-only sm:not-sr-only">{t.nav.login}</span>
+      </a>
+      <button
+        type="button"
+        class="group inline-flex size-11 items-center justify-center rounded-lg border border-border-dark text-surface transition-colors hover:bg-dark-raised md:hidden"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        data-menu-toggle
+        data-label-open={t.a11y.openMenu}
+        data-label-close={t.a11y.closeMenu}
+      >
+        <Icon name="menu-2" size={22} class="group-aria-expanded:hidden" />
+        <Icon name="x" size={22} class="hidden group-aria-expanded:block" />
+        <span class="sr-only" data-menu-label>{t.a11y.openMenu}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile: both pages as labelled groups -->
+  <div
+    id="mobile-menu"
+    hidden
+    data-mobile-menu
+    class="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-dark-raised md:hidden"
+  >
+    <nav aria-label={t.a11y.primaryNav} class="container-page flex flex-col gap-5 py-4">
+      {
+        groups.map((group) => (
+          <div class="flex flex-col gap-1">
+            <p id={`mobile-nav-${group.id}`} class="eyebrow px-3 pb-1 text-on-dark-muted">
+              {group.label}
+              {group.page === route && <span class="sr-only"> {t.a11y.currentPage}</span>}
+            </p>
+            <ul aria-labelledby={`mobile-nav-${group.id}`} class="flex flex-col gap-1">
+              {group.items.map((item) => (
+                <li>
+                  <a
+                    href={item.href}
+                    {...item.attrs}
+                    class="flex min-h-12 items-center gap-3 rounded-lg px-3 text-lg font-semibold text-on-dark transition-colors hover:bg-dark-raised hover:text-surface aria-current:bg-primary aria-current:text-surface"
+                  >
+                    <Icon name={item.icon} size={20} class="text-on-dark-muted" />
+                    <span class="flex-1">{item.label}</span>
+                    <Icon name="arrow-right" size={20} class="text-on-dark-muted" />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+      <div class="flex flex-col gap-3 border-t border-dark-raised pt-4">
+        <LanguageSwitcher lang={lang} route={route} class="self-start sm:hidden" />
+        <a href={sectionHref(route, lang, "contact")} class="btn btn-primary btn-lg">
+          <Icon name="calendar-event" />
+          {t.nav.requestDemo}
+        </a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<script>
+  import { initNavDropdowns } from "../../scripts/nav-dropdowns";
+
+  initNavDropdowns(document.querySelectorAll<HTMLElement>("[data-dropdown]"));
+
+  const toggle = document.querySelector<HTMLButtonElement>("[data-menu-toggle]");
+  const menu = document.querySelector<HTMLElement>("[data-mobile-menu]");
+  const label = toggle?.querySelector<HTMLElement>("[data-menu-label]");
+
+  if (toggle && menu && label) {
+    const isOpen = () => toggle.getAttribute("aria-expanded") === "true";
+    const setOpen = (open: boolean, restoreFocus = false) => {
+      toggle.setAttribute("aria-expanded", String(open));
+      menu.hidden = !open;
+      label.textContent = (open ? toggle.dataset.labelClose : toggle.dataset.labelOpen) ?? "";
+      if (!open && restoreFocus) toggle.focus();
+    };
+
+    toggle.addEventListener("click", () => setOpen(!isOpen()));
+    menu.addEventListener("click", (event) => {
+      if ((event.target as Element).closest("a[href^='#']")) setOpen(false);
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && isOpen()) setOpen(false, true);
+    });
+    matchMedia("(min-width: 48rem)").addEventListener("change", (event) => {
+      if (event.matches) setOpen(false);
+    });
+  }
+
+  // Landing page: highlight the link of the section in view.
+  const links = [...document.querySelectorAll<HTMLAnchorElement>("[data-nav-link]")];
+  const sections = [...new Set(links.map((link) => link.dataset.navLink))]
+    .map((id) => (id ? document.getElementById(id) : null))
+    .filter((section): section is HTMLElement => section !== null);
+  const visible = new Set<string>();
+
+  const setCurrent = (id: string | undefined) => {
+    for (const link of links) {
+      if (link.dataset.navLink === id) link.setAttribute("aria-current", "true");
+      else link.removeAttribute("aria-current");
+    }
+  };
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) visible.add(entry.target.id);
+        else visible.delete(entry.target.id);
+      }
+      setCurrent(sections.find((section) => visible.has(section.id))?.id);
+    },
+    { rootMargin: "-45% 0px -50% 0px" },
+  );
+  sections.forEach((section) => observer.observe(section));
+</script>

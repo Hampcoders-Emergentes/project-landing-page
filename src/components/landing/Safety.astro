@@ -1,0 +1,221 @@
+---
+import Icon from "../ui/Icon.astro";
+import SectionHeader from "../ui/SectionHeader.astro";
+import StatusBadge from "../ui/StatusBadge.astro";
+import { getRoutePath, useTranslations, type Lang } from "../../i18n/utils";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang).safety;
+
+const zones = [
+  { label: t.clean.zones.fryers, value: "0 mA" },
+  { label: t.clean.zones.grill, value: "0 mA" },
+  { label: t.clean.zones.floor, value: "0 mA" },
+  { label: t.clean.zones.ground, value: t.clean.groundOk },
+];
+
+const channels = [
+  { icon: "device-mobile", label: t.alarm.channels.screen },
+  { icon: "bell-ringing", label: t.alarm.channels.buzzer },
+  { icon: "message", label: t.alarm.channels.sms },
+] as const;
+
+const cardClass = "reveal flex flex-col gap-6 rounded-2xl border border-border bg-background p-6 sm:p-8";
+const iconTileClass = "flex size-12 shrink-0 items-center justify-center rounded-xl bg-primary text-surface";
+---
+
+<section id="safety" aria-labelledby="safety-title" class="border-y border-border bg-surface py-20 lg:py-28">
+  <div class="container-page flex flex-col gap-12 lg:gap-14">
+    <SectionHeader id="safety-title" eyebrow={t.eyebrow} title={t.title} intro={t.intro} />
+
+    <div class="grid gap-6 lg:grid-cols-2">
+      <!-- Safe-to-Clean protocol -->
+      <article class={cardClass} aria-labelledby="safety-clean-title">
+        <div class="flex items-start gap-4">
+          <span class={iconTileClass}><Icon name="droplet" size={24} /></span>
+          <div class="flex flex-col gap-2">
+            <h3 id="safety-clean-title" class="text-xl font-semibold">{t.clean.title}</h3>
+            <p class="leading-relaxed text-text-secondary">{t.clean.body}</p>
+          </div>
+        </div>
+        <div class="mt-auto rounded-xl border border-border bg-surface p-4 sm:p-5">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <p class="font-semibold">{t.clean.screenTitle}</p>
+            <span class="tnum rounded-md border border-border px-2 py-0.5 text-xs font-semibold">{t.clean.progress}</span>
+          </div>
+          <ul class="mt-2 divide-y divide-subtle">
+            {
+              zones.map((zone) => (
+                <li class="flex items-center gap-3 py-2.5 text-sm">
+                  <Icon name="check" class="text-success" />
+                  <span class="min-w-0 flex-1 font-medium">{zone.label}</span>
+                  <span class="tnum text-text-secondary">{zone.value}</span>
+                </li>
+              ))
+            }
+          </ul>
+          <div class="mt-2 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-3">
+            <StatusBadge status="success" label={t.clean.status} />
+            <span class="tnum text-xs text-text-secondary">{t.clean.logged}</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Multi-sensory alarm -->
+      <article class={cardClass} aria-labelledby="safety-alarm-title">
+        <div class="flex items-start gap-4">
+          <span class={iconTileClass}><Icon name="bell-ringing" size={24} /></span>
+          <div class="flex flex-col gap-2">
+            <h3 id="safety-alarm-title" class="text-xl font-semibold">{t.alarm.title}</h3>
+            <p class="leading-relaxed text-text-secondary">{t.alarm.body}</p>
+          </div>
+        </div>
+        <div class="mt-auto flex flex-col gap-3">
+          <div class="rounded-xl bg-danger p-5 text-center text-surface sm:p-6">
+            <Icon name="alert-octagon" size={40} class="mx-auto" />
+            <p class="mt-2 text-xl font-bold tracking-wide uppercase sm:text-2xl">
+              {t.alarm.status} · {t.alarm.headline}
+            </p>
+            <p class="tnum mt-1 text-lg font-semibold">{t.alarm.machine}</p>
+            <p class="mx-auto mt-2 max-w-sm text-[0.9375rem] leading-relaxed">{t.alarm.instruction}</p>
+            <ul class="mt-4 flex flex-wrap justify-center gap-2 text-xs font-semibold">
+              {
+                channels.map((channel) => (
+                  <li class="inline-flex items-center gap-1.5 rounded-full border border-surface/50 px-2.5 py-1">
+                    <Icon name={channel.icon} size={14} />
+                    {channel.label}
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+          <p class="flex gap-2 text-sm leading-relaxed text-text-secondary">
+            <Icon name="info-circle" size={18} class="mt-0.5" />
+            {t.alarm.note}
+          </p>
+        </div>
+      </article>
+
+      <!-- 30-second cleaning pause -->
+      <article class={cardClass} aria-labelledby="safety-pause-title" data-pause-demo>
+        <div class="flex items-start gap-4">
+          <span class={iconTileClass}><Icon name="player-pause" size={24} /></span>
+          <div class="flex flex-col gap-2">
+            <h3 id="safety-pause-title" class="text-xl font-semibold">{t.pause.title}</h3>
+            <p class="leading-relaxed text-text-secondary">{t.pause.body}</p>
+          </div>
+        </div>
+        <div class="mt-auto flex flex-col gap-4">
+          <div class="flex flex-col items-center gap-2 rounded-xl bg-background-dark p-6 text-center text-surface">
+            <p class="tnum text-5xl leading-none font-bold" data-pause-display>0:30</p>
+            <p class="font-semibold">{t.pause.screenTitle}</p>
+            <p class="flex items-center gap-2 text-sm text-on-dark">
+              <Icon name="lock" size={16} />
+              {t.pause.locked}
+            </p>
+            <div class="mt-2 h-1.5 w-full max-w-xs overflow-hidden rounded-full bg-border-dark" aria-hidden="true">
+              <div class="h-full origin-left rounded-full bg-surface transition-transform duration-1000 ease-linear" data-pause-progress>
+              </div>
+            </div>
+          </div>
+          <button
+            type="button"
+            class="btn btn-outline self-start"
+            data-pause-toggle
+            data-label-start={t.pause.start}
+            data-label-stop={t.pause.stop}
+          >
+            <Icon name="player-pause" />
+            <span data-pause-label>{t.pause.start}</span>
+          </button>
+          <p class="sr-only" aria-live="polite" data-pause-status data-msg-started={t.pause.started} data-msg-ended={t.pause.ended}>
+          </p>
+        </div>
+      </article>
+
+      <!-- Edge case: sensor without signal (US03 · scenario 2) -->
+      <article class={cardClass} aria-labelledby="safety-offline-title">
+        <div class="flex items-start gap-4">
+          <span class="flex size-12 shrink-0 items-center justify-center rounded-xl bg-offline text-surface">
+            <Icon name="wifi-off" size={24} />
+          </span>
+          <div class="flex flex-col gap-2">
+            <p class="eyebrow text-text-secondary">{t.edgeCaseLabel}</p>
+            <h3 id="safety-offline-title" class="text-xl font-semibold">{t.offline.title}</h3>
+            <p class="leading-relaxed text-text-secondary">{t.offline.body}</p>
+          </div>
+        </div>
+        <div class="mt-auto rounded-xl border-2 border-dashed border-offline bg-subtle p-4 sm:p-5">
+          <StatusBadge status="offline" label={t.offline.status} />
+          <p class="mt-3 text-lg leading-snug font-bold text-balance">{t.offline.headline}</p>
+          <p class="tnum mt-1 text-sm text-text-secondary">{t.offline.machine}</p>
+          <p class="mt-2 text-[0.9375rem]">{t.offline.instruction}</p>
+          <div class="mt-4 flex gap-3 rounded-lg border border-border bg-surface p-3 text-sm leading-relaxed">
+            <Icon name="message" class="mt-0.5 text-primary" />
+            <p>{t.offline.recommendation}</p>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <div class="flex justify-center">
+      <a href={`${getRoutePath("segments", lang)}#crew`} class="btn btn-outline btn-lg">
+        <Icon name="device-mobile" />
+        {t.tryInteractive}
+        <Icon name="arrow-right" />
+      </a>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Interactive demo of the 30-second cleaning pause.
+  const card = document.querySelector<HTMLElement>("[data-pause-demo]");
+  const display = card?.querySelector<HTMLElement>("[data-pause-display]");
+  const progress = card?.querySelector<HTMLElement>("[data-pause-progress]");
+  const toggle = card?.querySelector<HTMLButtonElement>("[data-pause-toggle]");
+  const label = card?.querySelector<HTMLElement>("[data-pause-label]");
+  const status = card?.querySelector<HTMLElement>("[data-pause-status]");
+
+  if (display && progress && toggle && label && status) {
+    const DURATION = 30;
+    let remaining = DURATION;
+    let timer: number | undefined;
+
+    const render = () => {
+      display.textContent = `0:${String(remaining).padStart(2, "0")}`;
+      progress.style.transform = `scaleX(${remaining / DURATION})`;
+    };
+
+    const stop = (finished: boolean) => {
+      clearInterval(timer);
+      timer = undefined;
+      remaining = DURATION;
+      render();
+      label.textContent = toggle.dataset.labelStart ?? "";
+      if (finished) status.textContent = status.dataset.msgEnded ?? "";
+    };
+
+    toggle.addEventListener("click", () => {
+      if (timer !== undefined) {
+        stop(false);
+        return;
+      }
+      remaining = DURATION;
+      render();
+      label.textContent = toggle.dataset.labelStop ?? "";
+      status.textContent = status.dataset.msgStarted ?? "";
+      timer = window.setInterval(() => {
+        remaining -= 1;
+        render();
+        if (remaining <= 0) stop(true);
+      }, 1000);
+    });
+
+    render();
+  }
+</script>

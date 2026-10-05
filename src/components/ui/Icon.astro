@@ -1,0 +1,28 @@
+---
+import { ICON_SPRITE_URL, type IconName } from "./icon-names";
+
+interface Props {
+  name: IconName;
+  size?: number;
+  class?: string;
+  /** Accessible name. Omit for decorative icons next to visible text. */
+  label?: string;
+  [dataAttribute: `data-${string}`]: string | boolean | undefined;
+}
+
+const { name, size = 20, class: className, label, ...dataAttributes } = Astro.props;
+---
+
+<svg
+  class:list={["shrink-0", className]}
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  role={label ? "img" : undefined}
+  aria-label={label}
+  aria-hidden={label ? undefined : "true"}
+  focusable="false"
+  {...dataAttributes}
+>
+  <use href={`${ICON_SPRITE_URL}#${name}`}></use>
+</svg>

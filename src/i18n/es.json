@@ -1,0 +1,761 @@
+{
+  "meta": {
+    "title": "ElectroLink · Seguridad eléctrica en tiempo real para cocinas de comida rápida",
+    "description": "Monitoreo eléctrico IoT para cadenas de comida rápida: alarmas de fuga a tierra durante la limpieza húmeda, menos disparos de llaves en hora punta y el costo de energía de cada equipo en soles.",
+    "ogLocale": "es_PE"
+  },
+  "a11y": {
+    "skipToContent": "Saltar al contenido principal",
+    "primaryNav": "Principal",
+    "languageNav": "Idioma",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú",
+    "currentLanguage": "(idioma actual)",
+    "currentPage": "(página actual)",
+    "contactLinks": "Contacto y recursos"
+  },
+  "nav": {
+    "platform": "Plataforma",
+    "roles": "Roles",
+    "problem": "Problema",
+    "safety": "Seguridad",
+    "management": "Gestión",
+    "ecosystem": "Ecosistema",
+    "pricing": "Planes",
+    "contact": "Contacto",
+    "login": "Iniciar sesión",
+    "requestDemo": "Solicitar demo"
+  },
+  "notices": {
+    "webApp": {
+      "checking": "Conectando con la app web…",
+      "title": "La app web no responde",
+      "body": "No pudimos conectar con la app web de ElectroLink. Puedes seguir navegando esta página e intentarlo de nuevo en un momento.",
+      "retry": "Reintentar",
+      "dismiss": "Cerrar"
+    },
+    "offline": {
+      "title": "Estás sin conexión",
+      "body": "El contenido que ya se cargó sigue disponible. Nos reconectaremos automáticamente.",
+      "retry": "Reintentar conexión",
+      "checking": "Comprobando conexión…",
+      "stillOffline": "Sigues sin conexión. Revisa tu red e inténtalo de nuevo."
+    },
+    "limited": {
+      "title": "Conectividad limitada",
+      "body": "Mostramos el contenido esencial. Las animaciones y vistas en vivo están en pausa para ahorrar datos.",
+      "dismiss": "Entendido"
+    },
+    "restored": "Conexión restablecida."
+  },
+  "hero": {
+    "titleLead": "Monitoreo eléctrico IoT en tiempo real e inteligencia de seguridad para ",
+    "titleHighlight": "cadenas de comida rápida",
+    "subtitle": "Previene riesgos de descarga eléctrica durante la limpieza húmeda de pisos, elimina las paradas en cocina y audita el costo en kilovatios de cada equipo.",
+    "ctaDemo": "Solicitar demo",
+    "ctaApp": "Acceder a la app web",
+    "trust": {
+      "auditReady": "Registros listos para auditorías de SUNAFIL, INDECI y OSINERGMIN",
+      "nonInvasive": "Instalación no invasiva, sin recablear"
+    },
+    "preview": {
+      "caption": "Lecturas simuladas de un tablero de cocina: 0 mA de fuga a tierra, tensión estable de 220 V y enlace de sensores en vivo.",
+      "panel": "Tablero de cocina · Línea 2",
+      "live": "En vivo",
+      "sensors": "12/12 sensores",
+      "leakage": "Fuga a tierra",
+      "safeCircuit": "Circuito seguro",
+      "tripThreshold": "Umbral de disparo 30 mA",
+      "voltage": "Tensión de suministro",
+      "stable": "Estable",
+      "nominal": "Nominal 220 V · 60 Hz",
+      "trend": "Tensión · últimos 60 s",
+      "equipment": "Equipos",
+      "ok": "OK",
+      "warning": "Advertencia",
+      "items": {
+        "fryer": "Freidora 01",
+        "grill": "Plancha",
+        "cooler": "Cámara de frío"
+      },
+      "path": {
+        "panel": "Tablero",
+        "gateway": "Gateway edge",
+        "cloud": "Nube"
+      },
+      "simulated": "Datos simulados"
+    }
+  },
+  "problems": {
+    "eyebrow": "El problema",
+    "title": "Agua, calor y circuitos de alta carga comparten los mismos pocos metros cuadrados.",
+    "intro": "Las cocinas de comida rápida tienen una de las operaciones con mayor demanda eléctrica del retail, pero la mayoría de locales no ve en tiempo real lo que pasa dentro de sus tableros eléctricos.",
+    "consequenceLabel": "Consecuencia",
+    "cards": {
+      "electrocution": {
+        "title": "Riesgo de electrocución al trapear de noche",
+        "body": "El personal trapea y baldea los pisos alrededor de freidoras, planchas y tableros sin saber si algún circuito tiene fuga de corriente.",
+        "consequence": "Lesiones graves al personal y responsabilidad legal directa para el local.",
+        "tag": "Riesgo crítico"
+      },
+      "breakerTrips": {
+        "title": "Llaves que se disparan en plena hora punta",
+        "body": "Las fallas no detectadas se acumulan hasta que una llave térmica se dispara en el almuerzo o la cena y deja fuera de servicio toda una línea.",
+        "consequence": "Ventas perdidas, insumos desperdiciados y pedidos acumulados.",
+        "tag": "Riesgo de parada"
+      },
+      "energyWaste": {
+        "title": "Equipos sin monitoreo que inflan el recibo",
+        "body": "Un solo recibo de luz para todo el local y ninguna visibilidad por equipo: lo que queda encendido o falla sube los costos sin que nadie lo note.",
+        "consequence": "Recibos de energía más altos cada mes sin una causa clara.",
+        "tag": "Consumo anormal"
+      },
+      "audits": {
+        "title": "Fiscalizaciones laborales y responsabilidad",
+        "body": "Sin registros trazables de seguridad eléctrica, las inspecciones de SUNAFIL e INDECI son difíciles de aprobar.",
+        "consequence": "Multas o el cierre temporal del local.",
+        "tag": "Exposición regulatoria"
+      }
+    }
+  },
+  "safety": {
+    "eyebrow": "Para el personal de cocina",
+    "title": "Sabe que una estación es segura antes de tocarla.",
+    "intro": "Señales claras y fáciles de usar en cada estación: alertas tempranas cuando algo cambia y protocolos simples para los momentos que importan.",
+    "edgeCaseLabel": "Caso límite",
+    "tryInteractive": "Prueba la pantalla de estación interactiva",
+    "clean": {
+      "title": "Protocolo Seguro para Limpiar",
+      "body": "Un toque antes del baldeo. Cada zona húmeda se verifica por aislamiento y fugas, y la pantalla solo da luz verde cuando todas pasan. Cada verificación queda registrada para auditorías.",
+      "screenTitle": "Verificación Seguro para Limpiar",
+      "progress": "4/4 zonas",
+      "zones": {
+        "fryers": "Circuitos de freidoras aislados",
+        "grill": "Zona de planchas y parrilla",
+        "floor": "Tomacorrientes a nivel de piso",
+        "ground": "Continuidad de tierra del tablero"
+      },
+      "groundOk": "OK",
+      "status": "Seguro para limpiar",
+      "logged": "Registrado 23:41 · turno noche"
+    },
+    "alarm": {
+      "title": "Alarmas multisensoriales instantáneas",
+      "body": "Una falla a tierra pone en rojo la pantalla de la estación, activa un zumbador e indica qué equipo evitar. El supervisor recibe un SMS en el mismo instante.",
+      "status": "Falla a tierra",
+      "headline": "Aléjate",
+      "machine": "Freidora 02 · fuga de 18 mA",
+      "instruction": "No toques el banco de freidoras ni el piso alrededor.",
+      "channels": {
+        "screen": "Pantalla",
+        "buzzer": "Zumbador",
+        "sms": "SMS al supervisor"
+      },
+      "note": "La alarma se activa antes del punto de disparo de 30 mA del interruptor, así el personal recibe el aviso primero."
+    },
+    "pause": {
+      "title": "Pausa de limpieza de 30 segundos",
+      "body": "La pantalla táctil se bloquea 30 segundos para limpiarla sin activar nada por error. Las alarmas de seguridad siguen activas todo el tiempo.",
+      "screenTitle": "Pantalla en pausa para limpieza",
+      "locked": "Entrada táctil bloqueada · alarmas activas",
+      "start": "Probar la pausa de 30 segundos",
+      "stop": "Detener demo",
+      "started": "Pausa de limpieza iniciada: 30 segundos.",
+      "ended": "Pausa de limpieza terminada. La pantalla táctil vuelve a estar activa."
+    },
+    "offline": {
+      "title": "Cuando un sensor deja de transmitir",
+      "body": "Sin datos nunca significa seguro. Si un sensor deja de reportar, el equipo se marca como no monitoreado y debe tratarse como energizado.",
+      "status": "Sin señal",
+      "headline": "Equipo no monitoreado — No tocar",
+      "machine": "Máquina de hielo · última lectura 23:39",
+      "instruction": "Trátalo como energizado hasta que vuelva la señal.",
+      "recommendation": "Repórtalo al gerente de tienda para que un técnico certificado revise el sensor."
+    }
+  },
+  "management": {
+    "eyebrow": "Para gerentes de tienda",
+    "title": "Costos de energía, incidentes y cumplimiento en un solo panel.",
+    "intro": "Mira cuánto cuesta cada equipo en soles, detecta lo que queda encendido después del cierre y mantén el mantenimiento al día con técnicos certificados.",
+    "benefits": {
+      "costs": {
+        "title": "Costo por equipo en soles",
+        "body": "Cada circuito se mide por separado y se convierte con tu tarifa, así sabes qué equipo pesa más en el recibo."
+      },
+      "idle": {
+        "title": "Detección de consumo fuera de horario",
+        "body": "El consumo después del cierre se compara con el horario del local para marcar los equipos que debieron apagarse."
+      },
+      "sla": {
+        "title": "Mantenimiento con SLA",
+        "body": "Cada falla abre un incidente con reloj de SLA y una orden de trabajo para un técnico certificado."
+      },
+      "continuity": {
+        "title": "Continuidad operativa",
+        "body": "Las alertas tempranas te permiten corregir fallas fuera de hora punta en vez de perder una línea en pleno servicio."
+      }
+    },
+    "cta": "Abrir el panel de gerencia",
+    "ctaNote": "¿Ya eres cliente? Inicia sesión para ver tus locales.",
+    "tryInteractive": "Explora el panel interactivo",
+    "dashboard": {
+      "caption": "Vista previa del panel de gerencia con datos de ejemplo de un local.",
+      "store": "Local #014 · Miraflores",
+      "period": "Este mes",
+      "kpis": {
+        "energy": "Costo de energía",
+        "idle": "Consumo fuera de horario",
+        "incidents": "Incidentes abiertos"
+      },
+      "idleSub": "3 equipos quedaron encendidos",
+      "incidentsSub": "1 por asignar",
+      "costTitle": "Costo por equipo",
+      "idleTitle": "Encendidos después del cierre",
+      "idleWindow": "23:00–06:00, anoche",
+      "idleBadge": "Consumo en vacío",
+      "machines": {
+        "fryerBank": "Banco de freidoras",
+        "grill": "Planchas y parrilla",
+        "cooler": "Cámara de frío",
+        "hood": "Campana y climatización",
+        "ice": "Máquina de hielo",
+        "fryer02": "Freidora 02",
+        "toaster": "Tostadora de banda",
+        "heatLamp": "Lámpara de calor 3"
+      },
+      "slaTitle": "SLA de mantenimiento",
+      "incidents": {
+        "inc2291": {
+          "title": "Freidora 02 · desgaste de aislamiento",
+          "assignee": "Electricista certificado",
+          "state": "Por asignar",
+          "sla": "SLA: quedan 02:47"
+        },
+        "inc2288": {
+          "title": "Cámara de frío sobre 6 °C",
+          "assignee": "Técnico de refrigeración",
+          "state": "Asignado",
+          "sla": "SLA: quedan 05:10"
+        }
+      },
+      "threshold": {
+        "title": "Horno combinado 01 · umbral sin configurar",
+        "body": "Hasta que alguien confirme sus límites, este equipo usa el valor seguro por defecto: alarma a 30 mA de fuga. Sigue protegido y marcado en el panel.",
+        "badge": "Configuración pendiente"
+      }
+    }
+  },
+  "ecosystem": {
+    "eyebrow": "Ecosistema IoT y RPA conectado",
+    "title": "Del tablero eléctrico a la acción en tres pasos.",
+    "intro": "Los sensores miden, el gateway edge decide localmente y los robots de software se encargan del seguimiento.",
+    "stepLabel": "Paso",
+    "steps": {
+      "clamps": {
+        "title": "Sensores de pinza no invasivos",
+        "body": "Pinzas de núcleo partido para corriente, fuga y temperatura que se colocan sobre los circuitos existentes del tablero. Sin recablear y sin cortar el servicio.",
+        "tags": ["Corriente y fuga", "Temperatura"]
+      },
+      "edge": {
+        "title": "Sincronización de telemetría en el edge",
+        "body": "El gateway envía lecturas a la nube en tiempo real y mantiene alarmas, pantallas y registros funcionando localmente si se cae el internet.",
+        "tags": ["Transmisión en tiempo real", "Búfer local"]
+      },
+      "rpa": {
+        "title": "Despacho automatizado con RPA",
+        "body": "Robots de software abren órdenes de trabajo, asignan técnicos certificados y recurren al SMS cuando falla el canal principal.",
+        "items": {
+          "workOrders": "Despacho de órdenes de trabajo",
+          "sms": "Alertas SMS de respaldo",
+          "reports": "Compilación de reportes regulatorios"
+        }
+      }
+    },
+    "cycle": {
+      "title": "Cómo se genera una alerta",
+      "steps": {
+        "measure": {
+          "title": "Medir",
+          "body": "Las pinzas miden corriente, fuga y temperatura de forma continua."
+        },
+        "evaluate": {
+          "title": "Evaluar",
+          "body": "El gateway compara cada lectura con el umbral del equipo."
+        },
+        "alert": {
+          "title": "Alertar",
+          "body": "Las pantallas y zumbadores de la estación reaccionan localmente, sin esperar a la nube."
+        },
+        "act": {
+          "title": "Actuar",
+          "body": "La plataforma registra el evento y el RPA abre la orden de trabajo."
+        }
+      }
+    },
+    "offline": {
+      "status": "Desconectado",
+      "title": "Sensor del banco de freidoras · enlace con la plataforma perdido",
+      "body": "Las lecturas se guardan temporalmente en el gateway edge y se suben automáticamente cuando vuelve la conexión, así el registro no tiene vacíos. Mientras tanto, las alarmas locales siguen funcionando.",
+      "buffer": "Almacenando localmente",
+      "synced": "Última sincronización 23:39"
+    },
+    "webApp": "Ver la telemetría en vivo en la app web"
+  },
+  "pricing": {
+    "eyebrow": "Planes y cumplimiento",
+    "title": "A la medida de un local o de toda una cadena.",
+    "intro": "Todos los planes incluyen alarmas de prevención de descargas y el protocolo Seguro para Limpiar. La instalación del hardware se cotiza por local.",
+    "recommended": "Recomendado para franquicias",
+    "perMonth": "/ mes",
+    "perStoreMonth": "/ local / mes",
+    "custom": "A medida",
+    "annual": "contrato anual",
+    "featuresLabel": "Qué incluye",
+    "unavailable": {
+      "title": "Precio temporalmente no disponible",
+      "body": "No pudimos cargar el precio de este plan.",
+      "cta": "Solicitar cotización"
+    },
+    "plans": {
+      "single": {
+        "name": "Local Único",
+        "description": "Para franquicias independientes que necesitan prevención de descargas inmediata y telemetría básica.",
+        "cta": "Empezar con Local Único",
+        "features": [
+          "Alarmas instantáneas de prevención de descargas",
+          "Protocolo Seguro para Limpiar y modo pausa",
+          "Telemetría básica en tiempo real",
+          "Alertas SMS de respaldo"
+        ]
+      },
+      "multi": {
+        "name": "Franquicia Multilocal",
+        "description": "Para operadores con 5 o más locales que necesitan una sola vista de todas sus cocinas.",
+        "cta": "Elegir Multilocal",
+        "features": [
+          "Todo lo de Local Único",
+          "Panel centralizado multilocal",
+          "Analítica de energía por equipo en soles",
+          "Registros automáticos de cierre de turno",
+          "Detección de consumo fuera de horario"
+        ]
+      },
+      "enterprise": {
+        "name": "Corporativo Enterprise",
+        "description": "Para cadenas nacionales que necesitan integración, gobierno y auditorías automatizadas.",
+        "cta": "Hablar con ventas",
+        "features": [
+          "Todo lo de Multilocal",
+          "Integración por API a medida (ERP, CMMS)",
+          "Gestión de SLA corporativos",
+          "Generación automática de auditorías regulatorias",
+          "Línea prioritaria de soporte de emergencia"
+        ]
+      }
+    },
+    "dossier": {
+      "title": "Expedientes listos para auditoría en un clic",
+      "body": "Exporta registros de seguridad con fecha y hora, pruebas de fuga, verificaciones Seguro para Limpiar e historial de incidentes, con el formato que piden las inspecciones de SUNAFIL, INDECI y OSINERGMIN.",
+      "filesLabel": "Descarga una muestra",
+      "files": [
+        {
+          "title": "Registro de seguridad · septiembre 2026",
+          "href": "/assets/docs/electrolink-registro-seguridad-muestra-es.pdf",
+          "format": "PDF"
+        },
+        {
+          "title": "Expediente de inspección · Local #014",
+          "href": "/assets/docs/electrolink-expediente-inspeccion-muestra-es.pdf",
+          "format": "PDF"
+        }
+      ],
+      "download": "Descargar",
+      "sampleNote": "Archivos de muestra con datos ficticios.",
+      "cta": "Solicita uno con tus propios datos"
+    },
+    "customer": {
+      "text": "¿Ya eres cliente?",
+      "cta": "Inicia sesión en la app web"
+    }
+  },
+  "contact": {
+    "eyebrow": "Solicita una demo",
+    "title": "Mira ElectroLink funcionando en tu propia cocina.",
+    "intro": "Cuéntanos sobre tus locales y coordinaremos una demostración en sitio con un técnico certificado.",
+    "steps": {
+      "review": {
+        "title": "Revisamos tus locales",
+        "body": "Distribución de la cocina, tipos de tablero y los equipos que quieres cubrir."
+      },
+      "pilot": {
+        "title": "Instalación piloto en sitio",
+        "body": "Un técnico instala pinzas y un gateway en los circuitos seleccionados."
+      },
+      "walkthrough": {
+        "title": "Recorrido en vivo con tu equipo",
+        "body": "Pantallas de estación, el panel de gerencia y un expediente de auditoría con tus propios datos."
+      }
+    },
+    "emergency": {
+      "label": "¿Ya eres cliente y tienes una falla activa?",
+      "line": "Línea técnica 24/7"
+    },
+    "form": {
+      "title": "Agenda una demostración",
+      "required": "Todos los campos son obligatorios.",
+      "fields": {
+        "name": {
+          "label": "Nombre completo",
+          "placeholder": "p. ej. María Torres"
+        },
+        "email": {
+          "label": "Correo corporativo",
+          "placeholder": "nombre@empresa.com",
+          "hint": "Usa el correo de tu empresa para que podamos verificar tu cadena."
+        },
+        "chain": {
+          "label": "Nombre de la cadena",
+          "placeholder": "p. ej. Brasa Express S.A.C."
+        },
+        "locations": {
+          "label": "Número de locales",
+          "placeholder": "Selecciona una opción",
+          "options": [
+            { "value": "1", "label": "1 local" },
+            { "value": "2-4", "label": "2–4 locales" },
+            { "value": "5-19", "label": "5–19 locales" },
+            { "value": "20-49", "label": "20–49 locales" },
+            { "value": "50+", "label": "50 o más locales" }
+          ]
+        },
+        "phone": {
+          "label": "Teléfono",
+          "placeholder": "987 654 321",
+          "hint": "Celular (9 dígitos) o fijo con su código de ciudad."
+        }
+      },
+      "consent": {
+        "before": "Acepto que me contacten sobre ElectroLink y acepto la ",
+        "link": "política de privacidad",
+        "after": "."
+      },
+      "honeypot": "Deja este campo vacío",
+      "submit": "Solicitar demo",
+      "sending": "Enviando tu solicitud…",
+      "sendingShort": "Enviando…"
+    },
+    "errors": {
+      "summary": "Revisa estos campos:",
+      "name": {
+        "required": "Ingresa tu nombre completo.",
+        "invalid": "Usa al menos 2 letras, sin números ni símbolos."
+      },
+      "email": {
+        "required": "Ingresa tu correo corporativo.",
+        "invalid": "Ingresa un correo válido, p. ej. nombre@empresa.com."
+      },
+      "chain": {
+        "required": "Ingresa el nombre de tu cadena.",
+        "invalid": "Usa al menos 2 caracteres."
+      },
+      "locations": {
+        "required": "Selecciona cuántos locales operas."
+      },
+      "phone": {
+        "required": "Ingresa un número de teléfono.",
+        "invalid": "Ingresa un celular de 9 dígitos (p. ej. 987 654 321) o un fijo con su código de ciudad (p. ej. 01 234 5678)."
+      },
+      "consent": {
+        "required": "Acepta la política de privacidad para que podamos contactarte."
+      }
+    },
+    "failure": {
+      "title": "No pudimos completar tu solicitud",
+      "body": "El servicio de registro no respondió. Tus datos siguen en el formulario, así que puedes intentarlo de nuevo en un momento.",
+      "retry": "Reintentar"
+    },
+    "success": {
+      "title": "Solicitud recibida",
+      "body": "¡Gracias! Un especialista te contactará para coordinar tu demostración en sitio. Mientras tanto, puedes explorar la app web.",
+      "cta": "Abrir la app web",
+      "again": "Enviar otra solicitud"
+    }
+  },
+  "footer": {
+    "tagline": "Seguridad eléctrica IoT e inteligencia energética para cocinas de comida rápida.",
+    "by": "Un producto de Hampcoders",
+    "emergency": "Soporte técnico de emergencia 24/7",
+    "columns": {
+      "platform": "Plataforma",
+      "resources": "Recursos",
+      "legal": "Legal"
+    },
+    "links": {
+      "docs": "Documentación",
+      "webApp": "App web",
+      "contact": "Contacto",
+      "status": "Estado del sistema",
+      "privacy": "Política de privacidad",
+      "terms": "Términos del servicio",
+      "segments": "Demo interactiva"
+    },
+    "status": {
+      "label": "Estado del sistema",
+      "checking": "Comprobando",
+      "operational": "Operativo",
+      "degraded": "Degradado",
+      "disruption": "Interrupción del servicio",
+      "unknown": "No disponible"
+    },
+    "iconLinks": {
+      "email": "Escribir a ventas",
+      "phone": "Llamar a la línea técnica 24/7",
+      "docs": "Documentación",
+      "status": "Estado del sistema",
+      "webApp": "App web"
+    },
+    "disclaimer": "El monitoreo de ElectroLink complementa, pero no reemplaza, las instalaciones eléctricas certificadas, los interruptores diferenciales y las inspecciones periódicas que exige la normativa peruana (OSINERGMIN, INDECI, SUNAFIL). Los umbrales de alarma deben ser validados por un ingeniero electricista colegiado para cada local.",
+    "rights": "Todos los derechos reservados.",
+    "sample": "Las cifras de telemetría y del panel que aparecen en esta página son datos de ejemplo."
+  },
+  "segments": {
+    "meta": {
+      "title": "ElectroLink · Vistas del personal de cocina y del gerente",
+      "description": "Prueba la pantalla de estación de ElectroLink para el personal de cocina y explora el panel del gerente de tienda: verificación Seguro para Limpiar, alarmas de falla a tierra, costos de energía en soles y despacho con SLA."
+    },
+    "breadcrumb": {
+      "label": "Ruta de navegación",
+      "home": "Inicio",
+      "current": "Roles"
+    },
+    "hero": {
+      "titleLead": "Mira ElectroLink a través de los ojos de ",
+      "titleHighlight": "cada rol",
+      "intro": "Cambia entre el personal de cocina y el gerente de tienda. Todo lo que ves abajo es interactivo: ejecuta escenarios en la pantalla de estación o explora el panel de gerencia."
+    },
+    "switcher": {
+      "label": "Elige un rol",
+      "crew": {
+        "title": "Personal de cocina",
+        "subtitle": "Operadores y personal de limpieza"
+      },
+      "manager": {
+        "title": "Gerente de tienda",
+        "subtitle": "Gerentes y responsables de SST"
+      }
+    },
+    "crew": {
+      "eyebrow": "Personal de cocina",
+      "title": "Prueba lo que ve el personal en la pantalla de estación.",
+      "intro": "Elige un momento del turno. La pantalla táctil reacciona como lo haría en una cocina real.",
+      "scenariosLabel": "Momentos del turno",
+      "scenarios": {
+        "live": {
+          "title": "Turno normal",
+          "hint": "Telemetría en vivo mientras opera la línea",
+          "tag": "Telemetría en tiempo real",
+          "infoTitle": "Todo en verde, nada de qué preocuparse",
+          "infoBody": "La fuga se mantiene en 0 mA y cada equipo muestra su estado. El personal solo necesita mirar cuando algo cambia."
+        },
+        "clean": {
+          "title": "Ejecutar Seguro para Limpiar",
+          "hint": "Antes del baldeo nocturno",
+          "tag": "Protocolo Seguro para Limpiar",
+          "infoTitle": "Un toque antes del baldeo",
+          "infoBody": "Cada zona húmeda se verifica por aislamiento y fugas. Solo cuando todas pasan, la pantalla da luz verde, y la verificación queda registrada para auditorías."
+        },
+        "alarm": {
+          "title": "Emergencia por falla a tierra",
+          "hint": "Fuga detectada en una freidora",
+          "tag": "Alarma de emergencia",
+          "infoTitle": "El aviso llega antes de tocar el equipo",
+          "infoBody": "Una falla a tierra pone la pantalla en rojo, activa un zumbador e indica qué equipo evitar. El supervisor y un técnico reciben la alerta al mismo tiempo."
+        },
+        "pause": {
+          "title": "Pausar pantalla 30 s",
+          "hint": "Limpiar la pantalla sin activar nada",
+          "tag": "Modo pausa de 30 segundos",
+          "infoTitle": "Limpia la pantalla sin accidentes",
+          "infoBody": "La entrada táctil se bloquea 30 segundos para limpiar pantallas grasosas. Las alarmas de seguridad siguen funcionando durante la pausa."
+        },
+        "offline": {
+          "title": "Un sensor pierde la señal",
+          "hint": "Caso límite: equipo no monitoreado",
+          "tag": "Caso límite · señal perdida",
+          "infoTitle": "Sin datos nunca significa seguro",
+          "infoBody": "Si un sensor deja de reportar, el equipo se marca como no monitoreado y debe tratarse como energizado hasta que vuelva la señal."
+        }
+      },
+      "screen": {
+        "label": "Pantalla de estación de cocina simulada",
+        "panel": "Tablero de cocina · Línea 2",
+        "live": "IoT en vivo",
+        "sensorsAll": "12/12 sensores",
+        "sensorsDegraded": "11/12 sensores",
+        "time": "23:41",
+        "leakage": "Fuga a tierra",
+        "safeCircuit": "Circuito seguro",
+        "tripThreshold": "Umbral de disparo 30 mA",
+        "equipment": "Estado de equipos",
+        "ok": "OK",
+        "warning": "Advertencia",
+        "items": {
+          "fryer01": "Freidora 01",
+          "fryer02": "Freidora 02",
+          "grill": "Plancha",
+          "cooler": "Cámara de frío",
+          "ice": "Máquina de hielo"
+        },
+        "clean": {
+          "title": "Verificación Seguro para Limpiar",
+          "zonesLabel": "zonas",
+          "checking": "Verificando…",
+          "zones": [
+            { "label": "Circuitos de freidoras aislados", "value": "0 mA" },
+            { "label": "Zona de planchas y parrilla", "value": "0 mA" },
+            { "label": "Tomacorrientes a nivel de piso (zona húmeda)", "value": "0 mA" },
+            { "label": "Continuidad de tierra del tablero principal", "value": "OK" }
+          ],
+          "status": "Seguro para limpiar",
+          "done": "Puedes iniciar el baldeo del piso",
+          "logged": "Registrado · turno noche · 23:41"
+        },
+        "alarm": {
+          "status": "Falla a tierra",
+          "headline": "Aléjate",
+          "machine": "Freidora 02 · fuga de 18 mA",
+          "instruction": "No toques el banco de freidoras ni el piso alrededor. El supervisor y un técnico ya fueron notificados.",
+          "threshold": "Alarma temprana: el interruptor dispara a 30 mA.",
+          "ack": "Ya me alejé de la zona",
+          "isolated": "Freidora 02 aislada · No tocar",
+          "isolatedBody": "Seguirá bloqueada hasta que un técnico certificado la libere.",
+          "isolatedBadge": "Aislada",
+          "incident": "Incidente",
+          "incidentValue": "INC-2291 abierto 23:41",
+          "supervisor": "Supervisor",
+          "supervisorValue": "Notificado en pantalla y por SMS",
+          "restOfLine": "Resto de la línea",
+          "restValue": "0 mA",
+          "safe": "Seguro"
+        },
+        "pause": {
+          "title": "Pantalla en pausa para limpieza",
+          "body": "La entrada táctil está desactivada. Las alarmas siguen activas."
+        },
+        "offline": {
+          "status": "Sin señal",
+          "headline": "Equipo no monitoreado — No tocar",
+          "body": "El sensor de la máquina de hielo perdió la señal a las 23:39. Trata el equipo como energizado.",
+          "monitored": "Monitoreado",
+          "offline": "Sin conexión",
+          "fallback": "Se envió un SMS de respaldo al supervisor de turno. El gateway reintenta cada 10 s.",
+          "recommendation": "Repórtalo al gerente de tienda para que un técnico revise el sensor."
+        }
+      }
+    },
+    "manager": {
+      "eyebrow": "Gerente de tienda",
+      "title": "Explora el panel de gerencia.",
+      "intro": "Cambia el periodo y la unidad, abre cada pestaña y actúa sobre incidentes y umbrales.",
+      "period": {
+        "label": "Periodo",
+        "week": "Semana",
+        "month": "Mes",
+        "thisWeek": "Esta semana",
+        "thisMonth": "Este mes"
+      },
+      "unit": {
+        "label": "Unidad",
+        "soles": "Soles (S/)",
+        "kwh": "kWh"
+      },
+      "store": "Local #014 · Miraflores",
+      "kpis": {
+        "energy": "Energía",
+        "idle": "Consumo fuera de horario",
+        "incidents": "Incidentes abiertos",
+        "idleSub": "3 equipos quedaron encendidos",
+        "incidentsPending": "1 por asignar",
+        "incidentsAssigned": "Todos asignados a técnicos"
+      },
+      "tabsLabel": "Secciones del panel",
+      "tabs": {
+        "costs": "Costo por equipo",
+        "idle": "Consumo en vacío",
+        "incidents": "Incidentes",
+        "thresholds": "Umbrales"
+      },
+      "pendingBadge": "pendiente",
+      "costs": {
+        "total": "Total"
+      },
+      "idle": {
+        "window": "Consumo después del cierre (23:00–06:00), anoche",
+        "chartLabel": "Consumo por hora después del cierre",
+        "hour": "Hora",
+        "load": "Consumo",
+        "allNight": "toda la noche",
+        "wasted": "Desperdiciado",
+        "alert": "Avisarme a la hora de cierre",
+        "alertOn": "Aviso de cierre programado para las 23:15."
+      },
+      "incidents": {
+        "inc2291": {
+          "title": "Freidora 02 · desgaste de aislamiento (evento de 18 mA)",
+          "sla": "SLA: quedan 02:47",
+          "awaiting": "Por asignar · requiere un electricista certificado",
+          "dispatch": "Asignar técnico",
+          "dispatched": "Técnico asignado.",
+          "workOrder": "Orden de trabajo WO-1182 creada automáticamente."
+        },
+        "inc2288": {
+          "title": "Cámara de frío sobre el umbral de 6 °C",
+          "state": "Asignado · SLA 05:10"
+        }
+      },
+      "thresholds": {
+        "configured": "Configurado",
+        "rows": [
+          { "name": "Banco de freidoras", "value": "30 mA · 40 A" },
+          { "name": "Planchas y parrilla", "value": "30 mA · 32 A" },
+          { "name": "Cámara de frío", "value": "máx. 6 °C" }
+        ],
+        "pendingName": "Horno combinado 01",
+        "pendingBody": "Sin umbral definido · usa el valor seguro por defecto (30 mA)",
+        "pendingBadge": "Configuración pendiente",
+        "apply": "Aplicar recomendado",
+        "appliedValue": "30 mA · 25 A",
+        "applied": "Umbral recomendado aplicado al Horno combinado 01."
+      },
+      "why": {
+        "costs": {
+          "tag": "Costo por equipo",
+          "title": "Energía traducida a soles",
+          "body": "Cada circuito se mide por separado y se convierte con tu tarifa, así ves qué equipo pesa más en el recibo."
+        },
+        "idle": {
+          "tag": "Detección fuera de horario",
+          "title": "Encuentra equipos encendidos toda la noche",
+          "body": "ElectroLink compara el consumo después del cierre con el horario del local y marca los equipos que debieron apagarse."
+        },
+        "incidents": {
+          "tag": "Despacho con SLA",
+          "title": "Las fallas se convierten en trabajo asignado",
+          "body": "Los incidentes se abren automáticamente con un reloj de SLA. Al asignarlos, el flujo RPA crea una orden de trabajo para un técnico certificado."
+        },
+        "thresholds": {
+          "tag": "Umbrales por defecto",
+          "title": "Sin configurar nunca significa sin protección",
+          "body": "Los equipos sin umbral propio usan un valor seguro por defecto y siguen marcados hasta que alguien confirme los valores correctos."
+        }
+      },
+      "sample": "Las cifras mostradas son datos de ejemplo de un solo local."
+    },
+    "cta": {
+      "title": "¿Listo para verlo en tu propia cocina?",
+      "body": "Un técnico certificado instala un kit piloto y guía a tu personal y gerentes por ambas vistas.",
+      "demo": "Solicitar demo",
+      "app": "Acceder a la app web"
+    }
+  }
+}

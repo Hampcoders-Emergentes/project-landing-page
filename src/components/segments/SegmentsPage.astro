@@ -1,0 +1,73 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Footer from "../landing/Footer.astro";
+import Header from "../landing/Header.astro";
+import SystemNotices from "../landing/SystemNotices.astro";
+import Icon from "../ui/Icon.astro";
+import RoleExplorer from "./RoleExplorer.astro";
+import { siteConfig } from "../../config";
+import { getRoutePath, sectionHref, useTranslations, type Lang } from "../../i18n/utils";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang).segments;
+---
+
+<Layout lang={lang} route="segments" title={t.meta.title} description={t.meta.description}>
+  <Header lang={lang} route="segments" />
+  <main id="main" tabindex="-1" class="focus:outline-none">
+    <section aria-labelledby="segments-title" class="relative isolate overflow-hidden bg-background-dark text-surface">
+      <div
+        class="bg-grid-dark pointer-events-none absolute inset-0 -z-10 mask-[radial-gradient(ellipse_at_80%_20%,black_15%,transparent_70%)]"
+        aria-hidden="true"
+      >
+      </div>
+      <div class="container-page flex flex-col gap-5 py-12 sm:py-16 lg:py-20">
+        <nav aria-label={t.breadcrumb.label}>
+          <ol class="flex flex-wrap items-center gap-2 text-sm text-on-dark-muted">
+            <li>
+              <a href={getRoutePath("home", lang)} class="text-on-dark underline-offset-4 hover:text-surface hover:underline">
+                {t.breadcrumb.home}
+              </a>
+            </li>
+            <li aria-hidden="true"><Icon name="chevron-right" size={16} /></li>
+            <li aria-current="page">{t.breadcrumb.current}</li>
+          </ol>
+        </nav>
+        <h1
+          id="segments-title"
+          class="max-w-4xl text-[2.125rem] leading-[1.1] font-bold tracking-tight text-balance sm:text-5xl motion-safe:animate-fade-in-up"
+        >
+          {t.hero.titleLead}<span class="text-accent">{t.hero.titleHighlight}</span>.
+        </h1>
+        <p class="max-w-2xl text-lg leading-relaxed text-pretty text-on-dark-muted">{t.hero.intro}</p>
+      </div>
+    </section>
+
+    <RoleExplorer lang={lang} />
+
+    <section aria-labelledby="segments-cta" class="border-t border-border bg-surface py-16 lg:py-20">
+      <div class="container-page flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+        <div class="flex max-w-2xl flex-col gap-2">
+          <h2 id="segments-cta" class="text-3xl leading-tight font-bold tracking-tight">{t.cta.title}</h2>
+          <p class="text-lg leading-relaxed text-text-secondary">{t.cta.body}</p>
+        </div>
+        <div class="flex flex-col gap-3 xs:flex-row xs:flex-wrap">
+          <a href={sectionHref("segments", lang, "contact")} class="btn btn-primary btn-lg">
+            <Icon name="calendar-event" />
+            {t.cta.demo}
+          </a>
+          <a href={siteConfig.webAppUrl} data-webapp-link class="btn btn-outline btn-lg">
+            {t.cta.app}
+            <Icon name="arrow-right" />
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer lang={lang} route="segments" />
+  <SystemNotices lang={lang} />
+</Layout>

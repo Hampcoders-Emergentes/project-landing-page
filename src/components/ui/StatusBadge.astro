@@ -1,0 +1,41 @@
+---
+import Icon from "./Icon.astro";
+import type { SafetyStatus } from "../../data/landing";
+
+interface Props {
+  status: SafetyStatus;
+  label: string;
+  size?: "sm" | "md";
+  class?: string;
+}
+
+const { status, label, size = "md", class: className } = Astro.props;
+
+// Safety states never rely on color alone: each pairs an icon with an uppercase label.
+const icons = {
+  success: "circle-check",
+  warning: "alert-triangle",
+  danger: "alert-octagon",
+  offline: "wifi-off",
+} as const;
+
+const fills = {
+  success: "bg-success",
+  warning: "bg-warning",
+  danger: "bg-danger",
+  offline: "bg-offline",
+} as const;
+---
+
+<span
+  class:list={[
+    "inline-flex shrink-0 items-center gap-1.5 rounded-md font-semibold tracking-wide whitespace-nowrap text-surface uppercase",
+    size === "sm" ? "px-2 py-0.5 text-xs" : "px-2.5 py-1 text-[0.8125rem]",
+    fills[status],
+    className,
+  ]}
+  data-status={status}
+>
+  <Icon name={icons[status]} size={size === "sm" ? 14 : 16} />
+  {label}
+</span>

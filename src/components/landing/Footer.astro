@@ -1,0 +1,184 @@
+---
+import Icon from "../ui/Icon.astro";
+import Logo from "../ui/Logo.astro";
+import type { IconName } from "../ui/icon-names";
+import { siteConfig, telHref } from "../../config";
+import { getRoutePath, sectionHref, useTranslations, type Lang, type RouteId } from "../../i18n/utils";
+
+interface Props {
+  lang: Lang;
+  route?: RouteId;
+}
+
+const { lang, route = "home" } = Astro.props;
+const dict = useTranslations(lang);
+const t = dict.footer;
+const year = new Date().getFullYear();
+
+const iconLinks: { href: string; icon: IconName; label: string; webApp?: boolean }[] = [
+  ...(siteConfig.salesEmail
+    ? [{ href: `mailto:${siteConfig.salesEmail}`, icon: "mail" as const, label: t.iconLinks.email }]
+    : []),
+  ...(siteConfig.supportPhone
+    ? [{ href: telHref(siteConfig.supportPhone), icon: "headset" as const, label: t.iconLinks.phone }]
+    : []),
+  { href: siteConfig.docsUrl, icon: "file", label: t.iconLinks.docs },
+  { href: siteConfig.statusPageUrl, icon: "broadcast", label: t.iconLinks.status },
+  { href: siteConfig.webAppUrl, icon: "login-2", label: t.iconLinks.webApp, webApp: true },
+];
+
+const platformLinks = [
+  { href: sectionHref(route, lang, "problem"), label: dict.nav.problem },
+  { href: sectionHref(route, lang, "safety"), label: dict.nav.safety },
+  { href: sectionHref(route, lang, "management"), label: dict.nav.management },
+  { href: sectionHref(route, lang, "ecosystem"), label: dict.nav.ecosystem },
+  { href: sectionHref(route, lang, "pricing"), label: dict.nav.pricing },
+  { href: getRoutePath("segments", lang), label: t.links.segments },
+];
+
+const linkClass = "inline-flex min-h-8 items-center text-on-dark-muted transition-colors hover:text-surface";
+const headingClass = "eyebrow text-surface";
+---
+
+<footer class="bg-background-dark text-on-dark-muted">
+  <div class="container-page flex flex-col gap-12 pt-16 pb-10 lg:pt-20">
+    <div class="grid gap-12 lg:grid-cols-[minmax(0,1.4fr)_repeat(3,minmax(0,0.7fr))] lg:gap-10">
+      <div class="flex flex-col gap-5">
+        <p class="flex items-center gap-2.5 text-xl font-bold text-surface">
+          <Logo size={38} />
+          ElectroLink
+        </p>
+        <p class="max-w-sm leading-relaxed">{t.tagline}</p>
+
+        {
+          siteConfig.supportPhone && (
+            <a
+              href={telHref(siteConfig.supportPhone)}
+              class="flex items-center gap-3 self-start rounded-xl border border-border-dark px-4 py-3 text-surface transition-colors hover:bg-dark-raised"
+            >
+              <Icon name="headset" size={22} />
+              <span class="flex flex-col">
+                <span class="text-xs text-on-dark-muted">{t.emergency}</span>
+                <span class="tnum font-semibold">{siteConfig.supportPhone}</span>
+              </span>
+            </a>
+          )
+        }
+
+        <nav aria-label={dict.a11y.contactLinks}>
+          <ul class="flex flex-wrap gap-2">
+            {
+              iconLinks.map((link) => (
+                <li>
+                  <a
+                    href={link.href}
+                    data-webapp-link={link.webApp ? "" : undefined}
+                    class="flex size-11 items-center justify-center rounded-lg border border-border-dark text-on-dark transition-colors hover:bg-dark-raised hover:text-surface"
+                  >
+                    <Icon name={link.icon} label={link.label} />
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </div>
+
+      <nav aria-labelledby="footer-platform" class="flex flex-col gap-3">
+        <h2 id="footer-platform" class={headingClass}>{t.columns.platform}</h2>
+        <ul class="flex flex-col gap-1.5">
+          {
+            platformLinks.map((link) => (
+              <li>
+                <a href={link.href} class={linkClass}>
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <nav aria-labelledby="footer-resources" class="flex flex-col gap-3">
+        <h2 id="footer-resources" class={headingClass}>{t.columns.resources}</h2>
+        <ul class="flex flex-col gap-1.5">
+          <li><a href={siteConfig.docsUrl} class={linkClass}>{t.links.docs}</a></li>
+          <li><a href={siteConfig.webAppUrl} data-webapp-link class={linkClass}>{t.links.webApp}</a></li>
+          <li><a href={sectionHref(route, lang, "contact")} class={linkClass}>{t.links.contact}</a></li>
+          <li>
+            <a
+              href={siteConfig.statusPageUrl}
+              class:list={[linkClass, "gap-2"]}
+              data-status-indicator
+              data-endpoint={siteConfig.statusEndpoint}
+              data-labels={JSON.stringify(t.status)}
+            >
+              <Icon name="broadcast" size={18} />
+              <span>{t.links.status}</span>
+              <span
+                hidden
+                class="rounded px-1.5 py-0.5 text-[0.6875rem] font-semibold tracking-wide text-surface uppercase"
+                data-status-badge></span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <nav aria-labelledby="footer-legal" class="flex flex-col gap-3">
+        <h2 id="footer-legal" class={headingClass}>{t.columns.legal}</h2>
+        <ul class="flex flex-col gap-1.5">
+          <li><a href={siteConfig.privacyUrl} class={linkClass}>{t.links.privacy}</a></li>
+          <li><a href={siteConfig.termsUrl} class={linkClass}>{t.links.terms}</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="flex flex-col items-center gap-4 border-t border-dark-raised pt-8 text-center text-sm leading-relaxed">
+      <p class="max-w-4xl text-pretty">{t.disclaimer}</p>
+      <p>{t.sample}</p>
+      <p class="flex flex-wrap justify-center gap-x-2 text-on-dark">
+        <span>© {year} ElectroLink · {t.by}.</span>
+        <span>{t.rights}</span>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Footer status indicator. Without PUBLIC_STATUS_ENDPOINT it stays a plain link.
+  type StatusLabels = Record<"checking" | "operational" | "degraded" | "disruption" | "unknown", string>;
+
+  const link = document.querySelector<HTMLAnchorElement>("[data-status-indicator]");
+  const badge = link?.querySelector<HTMLElement>("[data-status-badge]");
+  const endpoint = link?.dataset.endpoint;
+
+  if (link && badge && endpoint) {
+    const labels = JSON.parse(link.dataset.labels ?? "{}") as StatusLabels;
+    const fills = { operational: "bg-success", degraded: "bg-warning", disruption: "bg-warning", unknown: "bg-offline" };
+
+    const show = (state: keyof typeof fills | "checking") => {
+      badge.hidden = false;
+      badge.textContent = labels[state];
+      badge.classList.remove("bg-success", "bg-warning", "bg-offline");
+      badge.classList.add(state === "checking" ? "bg-offline" : fills[state]);
+    };
+
+    const toState = (body: unknown): keyof typeof fills => {
+      const data = body as { status?: string | { indicator?: string } };
+      const value = typeof data.status === "string" ? data.status : data.status?.indicator;
+      if (value === "operational" || value === "none") return "operational";
+      if (value === "degraded" || value === "minor") return "degraded";
+      if (value === "major" || value === "critical" || value === "outage") return "disruption";
+      return "unknown";
+    };
+
+    show("checking");
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 6000);
+    fetch(endpoint, { cache: "no-store", signal: controller.signal })
+      .then((response) => (response.ok ? response.json() : Promise.reject(new Error(`HTTP ${response.status}`))))
+      .then((body) => show(toState(body)))
+      .catch(() => show("unknown"))
+      .finally(() => clearTimeout(timer));
+  }
+</script>

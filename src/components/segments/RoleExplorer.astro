@@ -1,0 +1,67 @@
+---
+import Icon from "../ui/Icon.astro";
+import type { IconName } from "../ui/icon-names";
+import CrewSimulator from "./CrewSimulator.astro";
+import ManagerDashboard from "./ManagerDashboard.astro";
+import { useTranslations, type Lang } from "../../i18n/utils";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang).segments.switcher;
+
+const roles: { id: "crew" | "manager"; icon: IconName; title: string; subtitle: string }[] = [
+  { id: "crew", icon: "chef-hat", title: t.crew.title, subtitle: t.crew.subtitle },
+  { id: "manager", icon: "chart-bar", title: t.manager.title, subtitle: t.manager.subtitle },
+];
+---
+
+<section id="roles" aria-label={t.label} class="bg-background py-14 lg:py-20">
+  <div class="container-page flex flex-col gap-12">
+    <!-- Revealed by the script; without JavaScript both views are shown in sequence. -->
+    <div
+      hidden
+      role="tablist"
+      aria-label={t.label}
+      class="mx-auto grid w-full max-w-3xl gap-1.5 rounded-2xl border border-border bg-subtle p-1.5 sm:grid-cols-2"
+    >
+      {
+        roles.map((role, index) => (
+          <button
+            type="button"
+            role="tab"
+            id={`role-tab-${role.id}`}
+            aria-controls={role.id}
+            aria-selected={index === 0 ? "true" : "false"}
+            tabindex={index === 0 ? 0 : -1}
+            class="group flex min-h-16 cursor-pointer items-center gap-3 rounded-xl border border-transparent px-4 py-2.5 text-left transition-colors hover:bg-surface aria-selected:border-primary aria-selected:bg-surface aria-selected:shadow-[0_1px_3px_rgb(11_34_57/0.12)]"
+          >
+            <span class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-border text-text-secondary transition-colors group-aria-selected:bg-primary group-aria-selected:text-surface">
+              <Icon name={role.icon} size={22} />
+            </span>
+            <span class="flex flex-col">
+              <span class="text-[1.0625rem] font-bold">{role.title}</span>
+              <span class="text-sm text-text-secondary">{role.subtitle}</span>
+            </span>
+          </button>
+        ))
+      }
+    </div>
+
+    <div id="crew" role="tabpanel" aria-labelledby="role-tab-crew">
+      <CrewSimulator lang={lang} />
+    </div>
+    <div id="manager" role="tabpanel" aria-labelledby="role-tab-manager">
+      <ManagerDashboard lang={lang} />
+    </div>
+  </div>
+</section>
+
+<script>
+  import { initRoleExplorer } from "../../scripts/role-explorer";
+
+  const section = document.getElementById("roles");
+  if (section) initRoleExplorer(section);
+</script>

@@ -1,0 +1,200 @@
+---
+import Icon from "../ui/Icon.astro";
+import SectionHeader from "../ui/SectionHeader.astro";
+import StatusBadge from "../ui/StatusBadge.astro";
+import type { IconName } from "../ui/icon-names";
+import { siteConfig } from "../../config";
+import { dashboard } from "../../data/landing";
+import { formatNumber, formatSoles, getRoutePath, useTranslations, type Lang } from "../../i18n/utils";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang).management;
+const d = t.dashboard;
+
+const benefits: { id: keyof typeof t.benefits; icon: IconName }[] = [
+  { id: "costs", icon: "premium-rights" },
+  { id: "idle", icon: "moon" },
+  { id: "sla", icon: "tool" },
+  { id: "continuity", icon: "shield-check" },
+];
+
+const totalSoles = dashboard.costs.reduce((sum, item) => sum + item.soles, 0);
+const totalKwh = dashboard.costs.reduce((sum, item) => sum + item.kwh, 0);
+const maxSoles = Math.max(...dashboard.costs.map((item) => item.soles));
+
+const kpiLabel = "text-xs font-semibold tracking-wider text-text-secondary uppercase";
+---
+
+<section id="management" aria-labelledby="management-title" class="bg-background py-20 lg:py-28">
+  <div
+    class="container-page grid gap-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:items-start lg:gap-16"
+  >
+    <div class="flex flex-col gap-10">
+      <SectionHeader id="management-title" eyebrow={t.eyebrow} title={t.title} intro={t.intro} />
+
+      <ul class="flex flex-col gap-6">
+        {
+          benefits.map(({ id, icon }) => (
+            <li class="flex gap-4">
+              <span class="flex size-11 shrink-0 items-center justify-center rounded-xl border border-border bg-surface text-primary">
+                <Icon name={icon} size={22} />
+              </span>
+              <div>
+                <h3 class="text-lg font-semibold">{t.benefits[id].title}</h3>
+                <p class="mt-1 leading-relaxed text-text-secondary">{t.benefits[id].body}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="flex flex-col items-start gap-3">
+        <div class="flex flex-wrap gap-3">
+          <a href={`${getRoutePath("segments", lang)}#manager`} class="btn btn-primary btn-lg">
+            <Icon name="chart-bar" />
+            {t.tryInteractive}
+          </a>
+          <a href={siteConfig.webAppUrl} data-webapp-link class="btn btn-outline btn-lg">
+            <Icon name="login-2" />
+            {t.cta}
+          </a>
+        </div>
+        <p class="text-sm text-text-secondary">{t.ctaNote}</p>
+      </div>
+    </div>
+
+    <figure
+      aria-labelledby="dashboard-caption"
+      class="reveal m-0 overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_24px_48px_-28px_rgb(11_34_57/0.35)]"
+    >
+      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-border px-5 py-4">
+        <p class="flex items-center gap-2 font-semibold">
+          <Icon name="building-store" class="text-primary" />
+          {d.store}
+        </p>
+        <span class="rounded-md bg-subtle px-2 py-1 text-xs font-semibold text-text-secondary">{d.period}</span>
+      </div>
+
+      <dl class="grid border-b border-border sm:grid-cols-3">
+        <div class="flex flex-col gap-1 border-b border-border p-5 sm:border-r sm:border-b-0">
+          <dt class={kpiLabel}>{d.kpis.energy}</dt>
+          <dd class="tnum text-2xl font-bold">{formatSoles(lang, totalSoles)}</dd>
+          <dd class="tnum text-sm text-text-secondary">{formatNumber(lang, totalKwh)} kWh</dd>
+        </div>
+        <div class="flex flex-col gap-1 border-b border-border p-5 sm:border-r sm:border-b-0">
+          <dt class={kpiLabel}>{d.kpis.idle}</dt>
+          <dd class="tnum text-2xl font-bold text-warning">{formatSoles(lang, dashboard.idleSoles)}</dd>
+          <dd class="text-sm text-text-secondary">{d.idleSub}</dd>
+        </div>
+        <div class="flex flex-col gap-1 p-5">
+          <dt class={kpiLabel}>{d.kpis.incidents}</dt>
+          <dd class="tnum text-2xl font-bold">{dashboard.openIncidents}</dd>
+          <dd class="text-sm text-text-secondary">{d.incidentsSub}</dd>
+        </div>
+      </dl>
+
+      <div class="grid md:grid-cols-2">
+        <section aria-labelledby="dash-cost-title" class="p-5">
+          <h3 id="dash-cost-title" class="text-sm font-semibold">{d.costTitle}</h3>
+          <ul class="mt-4 flex flex-col gap-3.5">
+            {
+              dashboard.costs.map((item) => (
+                <li class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1.5 text-sm">
+                  <span class="font-medium">{d.machines[item.id]}</span>
+                  <span class="tnum font-semibold">{formatSoles(lang, item.soles)}</span>
+                  <span class="col-span-2 h-2 overflow-hidden rounded-full bg-subtle" aria-hidden="true">
+                    <span
+                      class="block h-full rounded-full bg-accent"
+                      style={`width: ${((item.soles / maxSoles) * 100).toFixed(1)}%`}
+                    />
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+
+        <section aria-labelledby="dash-idle-title" class="border-t border-border p-5 md:border-t-0 md:border-l">
+          <h3 id="dash-idle-title" class="text-sm font-semibold">{d.idleTitle}</h3>
+          <p class="tnum mt-0.5 text-xs text-text-secondary">{d.idleWindow}</p>
+          <ul class="mt-4 flex flex-col gap-2.5">
+            {
+              dashboard.idleMachines.map((item) => (
+                <li class="flex flex-col items-start gap-2 rounded-lg border border-border p-3">
+                  <span class="flex w-full items-baseline justify-between gap-3 text-sm">
+                    <span class="font-semibold">{d.machines[item.id]}</span>
+                    <span class="tnum text-text-secondary">{formatNumber(lang, item.kw, 1)} kW</span>
+                  </span>
+                  <StatusBadge size="sm" status="warning" label={d.idleBadge} />
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+      </div>
+
+      <section aria-labelledby="dash-sla-title" class="border-t border-border p-5">
+        <h3 id="dash-sla-title" class="flex items-center gap-2 text-sm font-semibold">
+          <Icon name="tool" size={18} class="text-text-secondary" />
+          {d.slaTitle}
+        </h3>
+        <ul class="mt-2 divide-y divide-subtle">
+          <li class="flex flex-wrap items-center gap-x-4 gap-y-2 py-3">
+            <span class="tnum text-sm font-bold">INC-2291</span>
+            <div class="order-last min-w-0 basis-full sm:order-0 sm:flex-1 sm:basis-0">
+              <p class="text-sm font-semibold">{d.incidents.inc2291.title}</p>
+              <p class="text-xs text-text-secondary">
+                {d.incidents.inc2291.assignee} · {d.incidents.inc2291.state}
+              </p>
+            </div>
+            <StatusBadge size="sm" status="warning" label={d.incidents.inc2291.sla} class="ml-auto sm:ml-0" />
+          </li>
+          <li class="flex flex-wrap items-center gap-x-4 gap-y-2 py-3">
+            <span class="tnum text-sm font-bold">INC-2288</span>
+            <div class="order-last min-w-0 basis-full sm:order-0 sm:flex-1 sm:basis-0">
+              <p class="text-sm font-semibold">{d.incidents.inc2288.title}</p>
+              <p class="text-xs text-text-secondary">
+                {d.incidents.inc2288.assignee} · {d.incidents.inc2288.state}
+              </p>
+            </div>
+            <span
+              class="tnum ml-auto inline-flex items-center gap-1.5 rounded-md border border-border px-2 py-0.5 text-xs font-semibold tracking-wide uppercase sm:ml-0"
+            >
+              <Icon name="clock" size={14} />
+              {d.incidents.inc2288.sla}
+            </span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Unconfigured threshold (US04 · scenario 2) -->
+      <div class="border-t border-border bg-background p-5">
+        <div class="flex flex-col gap-3 rounded-lg border border-dashed border-text-secondary bg-surface p-4 sm:flex-row sm:items-start">
+          <Icon name="alert-circle" size={22} class="mt-0.5" />
+          <div class="min-w-0 flex-1">
+            <p class="text-sm font-semibold">{d.threshold.title}</p>
+            <p class="mt-1 text-sm leading-relaxed text-text-secondary">{d.threshold.body}</p>
+          </div>
+          <span
+            class="inline-flex items-center gap-1.5 self-start rounded-md border border-border bg-subtle px-2 py-0.5 text-xs font-semibold tracking-wide whitespace-nowrap uppercase"
+          >
+            <Icon name="clock" size={14} />
+            {d.threshold.badge}
+          </span>
+        </div>
+      </div>
+
+      <figcaption
+        id="dashboard-caption"
+        class="flex items-center gap-2 border-t border-border bg-background px-5 py-3 text-xs text-text-secondary"
+      >
+        <Icon name="info-circle" size={16} />
+        {d.caption}
+      </figcaption>
+    </figure>
+  </div>
+</section>

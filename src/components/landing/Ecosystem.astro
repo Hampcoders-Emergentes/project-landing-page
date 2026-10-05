@@ -1,0 +1,140 @@
+---
+import Icon from "../ui/Icon.astro";
+import SectionHeader from "../ui/SectionHeader.astro";
+import StatusBadge from "../ui/StatusBadge.astro";
+import type { IconName } from "../ui/icon-names";
+import { siteConfig } from "../../config";
+import { useTranslations, type Lang } from "../../i18n/utils";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang).ecosystem;
+
+const steps: { id: keyof typeof t.steps; icon: IconName }[] = [
+  { id: "clamps", icon: "cpu" },
+  { id: "edge", icon: "broadcast" },
+  { id: "rpa", icon: "robot" },
+];
+
+const rpaItems: { icon: IconName; label: string }[] = [
+  { icon: "clipboard-list", label: t.steps.rpa.items.workOrders },
+  { icon: "message", label: t.steps.rpa.items.sms },
+  { icon: "file-check", label: t.steps.rpa.items.reports },
+];
+
+const cycle: { id: keyof typeof t.cycle.steps; icon: IconName }[] = [
+  { id: "measure", icon: "wave-saw-tool" },
+  { id: "evaluate", icon: "chart-bar" },
+  { id: "alert", icon: "bell-ringing" },
+  { id: "act", icon: "robot" },
+];
+---
+
+<section id="ecosystem" aria-labelledby="ecosystem-title" class="border-y border-border bg-surface py-20 lg:py-28">
+  <div class="container-page flex flex-col gap-14">
+    <SectionHeader id="ecosystem-title" eyebrow={t.eyebrow} title={t.title} intro={t.intro} align="center" />
+
+    <ol class="grid gap-8 lg:grid-cols-3 lg:gap-12">
+      {
+        steps.map(({ id, icon }, index) => {
+          const step = t.steps[id];
+          return (
+            <li class="reveal relative flex flex-col gap-4 rounded-2xl border border-border bg-background p-6 lg:p-7">
+              {index < steps.length - 1 && (
+                <span
+                  aria-hidden="true"
+                  class="absolute -bottom-8 left-1/2 h-8 w-0.5 -translate-x-1/2 bg-accent lg:top-1/2 lg:-right-12 lg:bottom-auto lg:left-auto lg:h-0.5 lg:w-12 lg:translate-x-0 lg:-translate-y-1/2"
+                >
+                  <span class="absolute -bottom-1 left-1/2 size-2 -translate-x-1/2 rounded-full bg-accent lg:top-1/2 lg:right-0 lg:bottom-auto lg:left-auto lg:translate-x-0 lg:-translate-y-1/2" />
+                </span>
+              )}
+              <div class="flex items-center justify-between gap-3">
+                <span class="flex size-12 items-center justify-center rounded-xl bg-primary text-surface">
+                  <Icon name={icon} size={24} />
+                </span>
+                <span class="tnum text-sm font-bold tracking-wide text-primary uppercase">
+                  {t.stepLabel} {String(index + 1).padStart(2, "0")}
+                </span>
+              </div>
+              <h3 class="text-xl font-semibold">{step.title}</h3>
+              <p class="leading-relaxed text-text-secondary">{step.body}</p>
+              <div class="mt-auto pt-1">
+                {"tags" in step ? (
+                  <ul class="flex flex-wrap gap-2">
+                    {step.tags.map((tag) => (
+                      <li class="rounded-md border border-border bg-surface px-2.5 py-1 text-xs font-semibold text-text-secondary">
+                        {tag}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <ul class="flex flex-col gap-2.5 text-[0.9375rem]">
+                    {rpaItems.map((item) => (
+                      <li class="flex items-center gap-2.5">
+                        <Icon name={item.icon} class="text-accent" />
+                        {item.label}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </li>
+          );
+        })
+      }
+    </ol>
+
+    <div class="grid gap-6 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
+      <section aria-labelledby="cycle-title" class="reveal rounded-2xl border border-border bg-background p-6 lg:p-8">
+        <h3 id="cycle-title" class="text-xl font-semibold">{t.cycle.title}</h3>
+        <ol class="mt-6 grid gap-6 sm:grid-cols-2">
+          {
+            cycle.map(({ id, icon }, index) => (
+              <li class="flex gap-3">
+                <span class="flex size-10 shrink-0 items-center justify-center rounded-lg border border-accent/40 bg-surface text-accent">
+                  <Icon name={icon} />
+                </span>
+                <div>
+                  <p class="font-semibold">
+                    <span class="tnum text-text-secondary">{index + 1}.</span> {t.cycle.steps[id].title}
+                  </p>
+                  <p class="mt-1 text-sm leading-relaxed text-text-secondary">{t.cycle.steps[id].body}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+      </section>
+
+      <!-- Sensor without platform link (US05 · scenario 2) -->
+      <section
+        aria-labelledby="eco-offline-title"
+        class="reveal flex flex-col items-start gap-4 rounded-2xl border-2 border-dashed border-offline bg-subtle p-6 lg:p-8"
+      >
+        <StatusBadge status="offline" label={t.offline.status} />
+        <h3 id="eco-offline-title" class="text-lg leading-snug font-semibold">{t.offline.title}</h3>
+        <p class="leading-relaxed text-text-secondary">{t.offline.body}</p>
+        <div
+          class="mt-auto flex w-full flex-wrap items-center justify-between gap-x-4 gap-y-2 rounded-lg border border-border bg-surface p-3 text-sm"
+        >
+          <span class="flex items-center gap-2 font-semibold">
+            <Icon name="database" class="text-accent" />
+            {t.offline.buffer}
+          </span>
+          <span class="tnum text-text-secondary">{t.offline.synced}</span>
+        </div>
+      </section>
+    </div>
+
+    <div class="flex justify-center">
+      <a href={siteConfig.webAppUrl} data-webapp-link class="btn btn-outline btn-lg">
+        <Icon name="broadcast" />
+        {t.webApp}
+        <Icon name="arrow-right" />
+      </a>
+    </div>
+  </div>
+</section>

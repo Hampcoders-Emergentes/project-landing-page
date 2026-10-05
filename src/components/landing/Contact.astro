@@ -1,0 +1,251 @@
+---
+import Icon from "../ui/Icon.astro";
+import SectionHeader from "../ui/SectionHeader.astro";
+import type { IconName } from "../ui/icon-names";
+import { siteConfig, telHref } from "../../config";
+import { useTranslations, type Lang } from "../../i18n/utils";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang).contact;
+const f = t.form.fields;
+
+const steps: { id: keyof typeof t.steps }[] = [{ id: "review" }, { id: "pilot" }, { id: "walkthrough" }];
+
+const textFields: {
+  name: "name" | "email" | "chain" | "phone";
+  type: "text" | "email" | "tel";
+  autocomplete: string;
+  icon: IconName;
+  inputmode?: "email" | "tel";
+  maxlength: number;
+}[] = [
+  { name: "name", type: "text", autocomplete: "name", icon: "user", maxlength: 80 },
+  { name: "email", type: "email", autocomplete: "email", icon: "mail", inputmode: "email", maxlength: 120 },
+  { name: "chain", type: "text", autocomplete: "organization", icon: "buildings", maxlength: 100 },
+  { name: "phone", type: "tel", autocomplete: "tel", icon: "phone", inputmode: "tel", maxlength: 20 },
+];
+
+const labelClass = "text-sm font-semibold";
+const errorClass = "flex items-start gap-1.5 text-sm font-medium text-text-primary";
+---
+
+<section id="contact" aria-labelledby="contact-title" class="border-t border-border bg-surface py-20 lg:py-28">
+  <div class="container-page grid gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-16">
+    <div class="flex flex-col gap-10">
+      <SectionHeader id="contact-title" eyebrow={t.eyebrow} title={t.title} intro={t.intro} />
+
+      <ol class="flex flex-col gap-6">
+        {
+          steps.map(({ id }, index) => (
+            <li class="flex gap-4">
+              <span class="tnum flex size-9 shrink-0 items-center justify-center rounded-full border border-primary text-sm font-bold text-primary">
+                {index + 1}
+              </span>
+              <div>
+                <h3 class="font-semibold">{t.steps[id].title}</h3>
+                <p class="mt-1 leading-relaxed text-text-secondary">{t.steps[id].body}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+
+      {
+        siteConfig.supportPhone && (
+          <div class="flex items-center gap-4 rounded-xl border border-border bg-background p-4">
+            <span class="flex size-11 shrink-0 items-center justify-center rounded-lg bg-subtle text-text-primary">
+              <Icon name="headset" size={22} />
+            </span>
+            <div class="flex flex-col">
+              <span class="text-sm text-text-secondary">{t.emergency.label}</span>
+              <a href={telHref(siteConfig.supportPhone)} class="tnum font-bold text-primary underline-offset-4 hover:underline">
+                {t.emergency.line} · {siteConfig.supportPhone}
+              </a>
+            </div>
+          </div>
+        )
+      }
+    </div>
+
+    <div class="reveal rounded-2xl border border-border bg-surface p-6 shadow-[0_24px_48px_-32px_rgb(11_34_57/0.4)] sm:p-9">
+      <form
+        method="post"
+        action={siteConfig.demoEndpoint || undefined}
+        class="flex flex-col gap-6"
+        aria-labelledby="demo-form-title"
+        aria-describedby="demo-form-required"
+        data-demo-form
+        data-endpoint={siteConfig.demoEndpoint}
+        data-lang={lang}
+        data-messages={JSON.stringify(t.errors)}
+      >
+        <div class="flex flex-col gap-1">
+          <h3 id="demo-form-title" class="text-2xl font-bold">{t.form.title}</h3>
+          <p id="demo-form-required" class="text-sm text-text-secondary">{t.form.required}</p>
+        </div>
+
+        <!-- Validation summary (US07 · scenario 2) -->
+        <div
+          hidden
+          tabindex="-1"
+          class="rounded-lg border-2 border-text-primary bg-subtle p-4 focus:outline-none"
+          data-form-summary
+        >
+          <p class="flex items-center gap-2 font-semibold">
+            <Icon name="alert-circle" />
+            {t.errors.summary}
+          </p>
+          <ul class="mt-2 ml-7 list-disc space-y-1 text-sm" data-form-summary-list></ul>
+        </div>
+
+        <!-- Service failure, input preserved (US07 · scenario 3) -->
+        <div
+          hidden
+          tabindex="-1"
+          role="alert"
+          class="flex flex-col gap-3 rounded-lg border-2 border-text-primary bg-subtle p-4 focus:outline-none"
+          data-form-failure
+        >
+          <p class="flex items-center gap-2 font-semibold">
+            <Icon name="alert-circle" />
+            {t.failure.title}
+          </p>
+          <p class="text-sm leading-relaxed text-text-secondary">{t.failure.body}</p>
+          <button type="button" class="btn btn-outline self-start" data-form-retry>
+            <Icon name="refresh" />
+            {t.failure.retry}
+          </button>
+        </div>
+
+        {
+          textFields.map((field) => {
+            const copy = f[field.name];
+            const hint = "hint" in copy ? copy.hint : undefined;
+            const id = `demo-${field.name}`;
+            return (
+              <div class="flex flex-col gap-2" data-field={field.name}>
+                <label for={id} class={labelClass}>
+                  {copy.label}
+                </label>
+                <div class="relative">
+                  <Icon
+                    name={field.icon}
+                    class="pointer-events-none absolute top-1/2 left-3.5 -translate-y-1/2 text-text-secondary"
+                  />
+                  <input
+                    id={id}
+                    name={field.name}
+                    type={field.type}
+                    autocomplete={field.autocomplete}
+                    inputmode={field.inputmode}
+                    placeholder={copy.placeholder}
+                    maxlength={field.maxlength}
+                    required
+                    aria-describedby={[hint && `${id}-hint`, `${id}-error`].filter(Boolean).join(" ")}
+                    class="input-field pl-11"
+                  />
+                </div>
+                {hint && (
+                  <p id={`${id}-hint`} class="text-sm text-text-secondary">
+                    {hint}
+                  </p>
+                )}
+                <p id={`${id}-error`} class={errorClass} hidden data-error-for={field.name}>
+                  <Icon name="alert-circle" size={18} class="mt-px" />
+                  <span data-error-text />
+                </p>
+              </div>
+            );
+          })
+        }
+
+        <div class="flex flex-col gap-2" data-field="locations">
+          <label for="demo-locations" class={labelClass}>{f.locations.label}</label>
+          <div class="relative">
+            <select
+              id="demo-locations"
+              name="locations"
+              required
+              aria-describedby="demo-locations-error"
+              class="input-field appearance-none pr-11 invalid:text-text-secondary [&>option]:text-text-primary"
+            >
+              <option value="" selected disabled>{f.locations.placeholder}</option>
+              {f.locations.options.map((option) => <option value={option.value}>{option.label}</option>)}
+            </select>
+            <Icon
+              name="chevron-down"
+              class="pointer-events-none absolute top-1/2 right-3.5 -translate-y-1/2 text-text-secondary"
+            />
+          </div>
+          <p id="demo-locations-error" class={errorClass} hidden data-error-for="locations">
+            <Icon name="alert-circle" size={18} class="mt-px" />
+            <span data-error-text></span>
+          </p>
+        </div>
+
+        <div class="flex flex-col gap-2" data-field="consent">
+          <div class="flex items-start gap-3">
+            <input
+              id="demo-consent"
+              name="consent"
+              type="checkbox"
+              value="yes"
+              required
+              aria-describedby="demo-consent-error"
+              class="mt-0.5 size-5 shrink-0 accent-primary"
+            />
+            <label for="demo-consent" class="text-sm leading-relaxed text-text-secondary">
+              {t.form.consent.before}<a href={siteConfig.privacyUrl} class="font-semibold text-primary underline underline-offset-2">{t.form.consent.link}</a>{t.form.consent.after}
+            </label>
+          </div>
+          <p id="demo-consent-error" class={errorClass} hidden data-error-for="consent">
+            <Icon name="alert-circle" size={18} class="mt-px" />
+            <span data-error-text></span>
+          </p>
+        </div>
+
+        <!-- Spam trap: hidden from people and assistive tech. -->
+        <div class="sr-only" aria-hidden="true">
+          <label for="demo-website">{t.form.honeypot}</label>
+          <input id="demo-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg w-full" data-form-submit>
+          <Icon name="calendar-event" data-icon-idle />
+          <Icon name="loader-2" class="hidden animate-spin" data-icon-busy />
+          <span data-submit-label data-label-idle={t.form.submit} data-label-busy={t.form.sendingShort}>
+            {t.form.submit}
+          </span>
+        </button>
+        <p class="sr-only" aria-live="polite" data-form-status data-msg-sending={t.form.sending}></p>
+      </form>
+
+      <!-- Confirmation (US07 · scenario 1) -->
+      <div hidden tabindex="-1" class="flex flex-col items-start gap-4 focus:outline-none" data-form-success>
+        <span class="flex size-14 items-center justify-center rounded-2xl bg-primary-soft text-primary">
+          <Icon name="circle-check" size={30} />
+        </span>
+        <h3 class="text-2xl font-bold">{t.success.title}</h3>
+        <p class="leading-relaxed text-text-secondary">{t.success.body}</p>
+        <div class="flex flex-wrap gap-3 pt-2">
+          <a href={siteConfig.webAppUrl} data-webapp-link class="btn btn-primary">
+            <Icon name="login-2" />
+            {t.success.cta}
+          </a>
+          <button type="button" class="btn btn-outline" data-form-again>{t.success.again}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { initDemoForm } from "../../scripts/demo-form";
+
+  const form = document.querySelector<HTMLFormElement>("[data-demo-form]");
+  if (form) initDemoForm(form);
+</script>

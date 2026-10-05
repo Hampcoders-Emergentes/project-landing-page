@@ -1,0 +1,390 @@
+---
+import Icon from "../ui/Icon.astro";
+import StatusBadge from "../ui/StatusBadge.astro";
+import { energyByPeriod, idleProfile, dashboard, type EnergyUnit, type Period } from "../../data/landing";
+import { formatNumber, formatSoles, useTranslations, type Lang } from "../../i18n/utils";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const dict = useTranslations(lang);
+const t = dict.segments.manager;
+const machines = dict.management.dashboard.machines;
+
+const periods: Period[] = ["week", "month"];
+const units: EnergyUnit[] = ["soles", "kwh"];
+const INITIAL = "month-soles";
+
+/** Pre-formats a value for every period/unit combination; the script swaps them in. */
+const variants = (format: (period: Period, unit: EnergyUnit) => string) =>
+  Object.fromEntries(periods.flatMap((period) => units.map((unit) => [`${period}-${unit}`, format(period, unit)])));
+
+const amount = (unit: EnergyUnit, soles: number, kwh: number) =>
+  unit === "soles" ? formatSoles(lang, soles) : `${formatNumber(lang, kwh)} kWh`;
+
+const totals = (period: Period) =>
+  energyByPeriod[period].costs.reduce(
+    (sum, item) => ({ soles: sum.soles + item.soles, kwh: sum.kwh + item.kwh }),
+    { soles: 0, kwh: 0 },
+  );
+
+const energyKpi = variants((p, u) => amount(u, totals(p).soles, totals(p).kwh));
+const energySub = variants((p, u) => amount(u === "soles" ? "kwh" : "soles", totals(p).soles, totals(p).kwh));
+const idleKpi = variants((p, u) => amount(u, energyByPeriod[p].idle.soles, energyByPeriod[p].idle.kwh));
+const periodName = variants((p) => (p === "week" ? t.period.thisWeek : t.period.thisMonth));
+
+const costRows = energyByPeriod.month.costs.map((item, index) => {
+  const width = (period: Period) => {
+    const costs = energyByPeriod[period].costs;
+    const max = Math.max(...costs.map((cost) => cost.soles));
+    return `${((costs[index].soles / max) * 100).toFixed(1)}%`;
+  };
+  return {
+    name: machines[item.id],
+    value: variants((p, u) => amount(u, energyByPeriod[p].costs[index].soles, energyByPeriod[p].costs[index].kwh)),
+    widths: { week: width("week"), month: width("month") },
+  };
+});
+
+const MAX_IDLE_KW = 5;
+
+const tabs = [
+  { id: "costs", label: t.tabs.costs },
+  { id: "idle", label: t.tabs.idle },
+  { id: "incidents", label: t.tabs.incidents },
+  { id: "thresholds", label: t.tabs.thresholds },
+] as const;
+
+const kpiLabel = "text-xs font-semibold tracking-wider text-text-secondary uppercase";
+const segmentClass =
+  "flex min-h-11 cursor-pointer items-center rounded-md px-4 text-sm font-semibold text-text-secondary transition-colors hover:text-text-primary has-checked:bg-surface has-checked:text-text-primary has-checked:shadow-[0_0_0_1px_var(--color-border)] has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-primary";
+const neutralChip =
+  "inline-flex items-center gap-1.5 rounded-md border border-border bg-surface px-2 py-0.5 text-xs font-semibold tracking-wide whitespace-nowrap uppercase";
+---
+
+<div class="flex flex-col gap-8" data-manager-dashboard>
+  <div class="flex flex-wrap items-end justify-between gap-6">
+    <div class="flex max-w-2xl flex-col gap-3">
+      <p class="eyebrow text-primary">{t.eyebrow}</p>
+      <h2 id="manager-title" class="text-3xl leading-tight font-bold tracking-tight text-balance">{t.title}</h2>
+      <p class="leading-relaxed text-text-secondary">{t.intro}</p>
+    </div>
+    <div class="flex flex-wrap gap-3">
+      <fieldset class="flex gap-1 rounded-lg border border-border bg-subtle p-1">
+        <legend class="sr-only">{t.period.label}</legend>
+        {
+          periods.map((period) => (
+            <label class={segmentClass}>
+              <input
+                type="radio"
+                name="dashboard-period"
+                value={period}
+                data-control="period"
+                checked={period === "month"}
+                class="sr-only"
+              />
+              {t.period[period]}
+            </label>
+          ))
+        }
+      </fieldset>
+      <fieldset class="flex gap-1 rounded-lg border border-border bg-subtle p-1">
+        <legend class="sr-only">{t.unit.label}</legend>
+        {
+          units.map((unit) => (
+            <label class={segmentClass}>
+              <input
+                type="radio"
+                name="dashboard-unit"
+                value={unit}
+                data-control="unit"
+                checked={unit === "soles"}
+                class="sr-only"
+              />
+              {t.unit[unit]}
+            </label>
+          ))
+        }
+      </fieldset>
+    </div>
+  </div>
+
+  <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_19rem] lg:items-start">
+    <div class="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_24px_48px_-32px_rgb(11_34_57/0.4)]">
+      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-border px-5 py-4">
+        <p class="flex items-center gap-2 font-semibold">
+          <Icon name="building-store" class="text-primary" />
+          {t.store}
+        </p>
+        <span
+          class="rounded-md bg-subtle px-2 py-1 text-xs font-semibold text-text-secondary"
+          data-variants={JSON.stringify(periodName)}
+        >
+          {periodName[INITIAL]}
+        </span>
+      </div>
+
+      <dl class="grid border-b border-border sm:grid-cols-3">
+        <div class="flex flex-col gap-1 border-b border-border p-5 sm:border-r sm:border-b-0">
+          <dt class={kpiLabel}>{t.kpis.energy}</dt>
+          <dd class="tnum text-2xl font-bold" data-variants={JSON.stringify(energyKpi)}>{energyKpi[INITIAL]}</dd>
+          <dd class="tnum text-sm text-text-secondary" data-variants={JSON.stringify(energySub)}>
+            {energySub[INITIAL]}
+          </dd>
+        </div>
+        <div class="flex flex-col gap-1 border-b border-border p-5 sm:border-r sm:border-b-0">
+          <dt class={kpiLabel}>{t.kpis.idle}</dt>
+          <dd class="tnum text-2xl font-bold text-warning" data-variants={JSON.stringify(idleKpi)}>
+            {idleKpi[INITIAL]}
+          </dd>
+          <dd class="text-sm text-text-secondary">{t.kpis.idleSub}</dd>
+        </div>
+        <div class="flex flex-col gap-1 p-5">
+          <dt class={kpiLabel}>{t.kpis.incidents}</dt>
+          <dd class="tnum text-2xl font-bold">{dashboard.openIncidents}</dd>
+          <dd class="text-sm text-text-secondary" data-incidents-sub data-assigned={t.kpis.incidentsAssigned}>
+            {t.kpis.incidentsPending}
+          </dd>
+        </div>
+      </dl>
+
+      <div role="tablist" aria-label={t.tabsLabel} class="flex gap-1 overflow-x-auto border-b border-border px-3">
+        {
+          tabs.map((tab, index) => (
+            <button
+              type="button"
+              role="tab"
+              id={`dash-tab-${tab.id}`}
+              aria-controls={`dash-panel-${tab.id}`}
+              aria-selected={index === 0 ? "true" : "false"}
+              tabindex={index === 0 ? 0 : -1}
+              class="inline-flex min-h-12 shrink-0 cursor-pointer items-center gap-2 border-b-2 border-transparent px-3 text-sm font-semibold text-text-secondary transition-colors hover:text-text-primary aria-selected:border-primary aria-selected:text-primary-dark"
+            >
+              {tab.label}
+              {tab.id === "thresholds" && (
+                <span class="rounded-full bg-primary-soft px-1.5 text-[0.6875rem] font-bold text-primary-dark" data-threshold-badge>
+                  1<span class="sr-only"> {t.pendingBadge}</span>
+                </span>
+              )}
+            </button>
+          ))
+        }
+      </div>
+
+      <!-- Cost by machine -->
+      <div role="tabpanel" id="dash-panel-costs" aria-labelledby="dash-tab-costs" tabindex="0" data-tab="costs" class="flex flex-col gap-3.5 p-5 focus:outline-none focus-visible:outline-2">
+        <ul class="flex flex-col gap-3.5">
+          {
+            costRows.map((row) => (
+              <li class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1.5 text-sm">
+                <span class="font-medium">{row.name}</span>
+                <span class="tnum font-semibold" data-variants={JSON.stringify(row.value)}>
+                  {row.value[INITIAL]}
+                </span>
+                <span class="col-span-2 h-2.5 overflow-hidden rounded-full bg-subtle" aria-hidden="true">
+                  <span
+                    class="block h-full rounded-full bg-accent transition-[width] duration-300"
+                    style={`width: ${row.widths.month}`}
+                    data-widths={JSON.stringify(row.widths)}
+                  />
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="flex justify-between gap-3 border-t border-border pt-3 text-sm">
+          <span class="text-text-secondary">
+            {t.costs.total} · <span data-variants={JSON.stringify(periodName)}>{periodName[INITIAL]}</span>
+          </span>
+          <strong class="tnum font-bold" data-variants={JSON.stringify(energyKpi)}>{energyKpi[INITIAL]}</strong>
+        </p>
+      </div>
+
+      <!-- Idle load -->
+      <div hidden role="tabpanel" id="dash-panel-idle" aria-labelledby="dash-tab-idle" data-tab="idle" class="flex flex-col gap-5 p-5">
+        <p class="text-sm text-text-secondary">{t.idle.window}</p>
+        <div aria-hidden="true">
+          <div class="flex h-36 items-end gap-2 border-b border-border px-1 sm:gap-3">
+            {
+              idleProfile.map((bar) => (
+                <div class="flex h-full flex-1 flex-col items-center justify-end gap-1">
+                  <span class="tnum text-[0.6875rem] font-semibold text-text-secondary">{formatNumber(lang, bar.kw, 1)}</span>
+                  <span
+                    class="w-full max-w-9 rounded-t bg-warning"
+                    style={`height: ${((bar.kw / MAX_IDLE_KW) * 100).toFixed(0)}%`}
+                  />
+                </div>
+              ))
+            }
+          </div>
+          <div class="mt-1.5 flex gap-2 px-1 sm:gap-3">
+            {idleProfile.map((bar) => <span class="tnum flex-1 text-center text-[0.6875rem] text-text-secondary">{bar.hour}h</span>)}
+          </div>
+        </div>
+        <table class="sr-only">
+          <caption>{t.idle.chartLabel}</caption>
+          <thead>
+            <tr><th scope="col">{t.idle.hour}</th><th scope="col">{t.idle.load}</th></tr>
+          </thead>
+          <tbody>
+            {idleProfile.map((bar) => <tr><td>{bar.hour}:00</td><td>{formatNumber(lang, bar.kw, 1)} kW</td></tr>)}
+          </tbody>
+        </table>
+
+        <ul class="grid gap-2.5 sm:grid-cols-3">
+          {
+            dashboard.idleMachines.map((item) => (
+              <li class="flex flex-col items-start gap-2 rounded-lg border border-border p-3">
+                <span class="text-sm font-semibold">{machines[item.id]}</span>
+                <span class="tnum text-sm text-text-secondary">
+                  {formatNumber(lang, item.kw, 1)} kW · {t.idle.allNight}
+                </span>
+                <StatusBadge size="sm" status="warning" label={dict.management.dashboard.idleBadge} />
+              </li>
+            ))
+          }
+        </ul>
+
+        <div class="flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4">
+          <p class="text-sm">
+            {t.idle.wasted} · <span data-variants={JSON.stringify(periodName)}>{periodName[INITIAL]}</span>:
+            <strong class="tnum font-bold text-warning" data-variants={JSON.stringify(idleKpi)}>{idleKpi[INITIAL]}</strong>
+          </p>
+          <div class="flex flex-col items-start gap-1.5 sm:items-end">
+            <button
+              type="button"
+              aria-pressed="false"
+              class="btn btn-outline group min-h-11 text-sm aria-pressed:border-primary aria-pressed:bg-primary-soft"
+              data-idle-toggle
+            >
+              <Icon name="bell-ringing" size={18} />
+              {t.idle.alert}
+              <Icon name="check" size={18} class="hidden group-aria-pressed:block" />
+            </button>
+            <p hidden class="text-sm text-text-secondary" data-idle-status>{t.idle.alertOn}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Incidents -->
+      <div hidden role="tabpanel" id="dash-panel-incidents" aria-labelledby="dash-tab-incidents" data-tab="incidents" class="flex flex-col gap-3 p-5">
+        <div class="flex flex-col gap-3 rounded-xl border border-border p-4">
+          <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
+            <span class="tnum font-bold">INC-2291</span>
+            <span class="min-w-0 flex-1 basis-48 text-sm">{t.incidents.inc2291.title}</span>
+            <StatusBadge size="sm" status="warning" label={t.incidents.inc2291.sla} />
+          </div>
+          <div class="flex flex-wrap items-center justify-between gap-3" data-dispatch-pending>
+            <span class="text-sm text-text-secondary">{t.incidents.inc2291.awaiting}</span>
+            <button type="button" class="btn btn-primary min-h-11 text-sm" data-dispatch>
+              <Icon name="tool" size={18} />
+              {t.incidents.inc2291.dispatch}
+            </button>
+          </div>
+          <div
+            hidden
+            tabindex="-1"
+            role="status"
+            class="flex items-start gap-3 rounded-lg border border-primary/30 bg-primary-soft p-3 text-sm focus:outline-none"
+            data-dispatch-done
+          >
+            <Icon name="circle-check" class="mt-px text-primary" />
+            <p>
+              <strong class="font-semibold">{t.incidents.inc2291.dispatched}</strong>{" "}
+              {t.incidents.inc2291.workOrder}
+            </p>
+          </div>
+        </div>
+        <div class="flex flex-wrap items-center gap-x-3 gap-y-2 rounded-xl border border-border p-4">
+          <span class="tnum font-bold">INC-2288</span>
+          <span class="min-w-0 flex-1 basis-48 text-sm">{t.incidents.inc2288.title}</span>
+          <span class={neutralChip}>
+            <Icon name="clock" size={14} />
+            {t.incidents.inc2288.state}
+          </span>
+        </div>
+      </div>
+
+      <!-- Thresholds (US04 · scenario 2) -->
+      <div hidden role="tabpanel" id="dash-panel-thresholds" aria-labelledby="dash-tab-thresholds" data-tab="thresholds" class="p-5">
+        <ul class="flex flex-col gap-2.5">
+          {
+            t.thresholds.rows.map((row) => (
+              <li class="flex flex-wrap items-center gap-x-3 gap-y-1.5 rounded-lg border border-border p-3 text-sm">
+                <span class="min-w-0 flex-1 font-semibold">{row.name}</span>
+                <span class="tnum text-text-secondary">{row.value}</span>
+                <span class={neutralChip}>
+                  <Icon name="check" size={14} />
+                  {t.thresholds.configured}
+                </span>
+              </li>
+            ))
+          }
+          <li
+            class="flex flex-wrap items-center gap-3 rounded-lg border border-dashed border-text-secondary bg-subtle p-3 text-sm"
+            data-threshold-pending
+          >
+            <div class="min-w-0 flex-1 basis-56">
+              <p class="font-semibold">{t.thresholds.pendingName}</p>
+              <p class="text-text-secondary">{t.thresholds.pendingBody}</p>
+            </div>
+            <span class={neutralChip}>
+              <Icon name="clock" size={14} />
+              {t.thresholds.pendingBadge}
+            </span>
+            <button
+              type="button"
+              class="btn btn-outline min-h-11 text-sm"
+              data-apply-threshold
+              data-msg-applied={t.thresholds.applied}
+            >
+              {t.thresholds.apply}
+            </button>
+          </li>
+          <li
+            hidden
+            tabindex="-1"
+            class="flex flex-wrap items-center gap-x-3 gap-y-1.5 rounded-lg border border-border p-3 text-sm focus:outline-none"
+            data-threshold-configured
+          >
+            <span class="min-w-0 flex-1 font-semibold">{t.thresholds.pendingName}</span>
+            <span class="tnum text-text-secondary">{t.thresholds.appliedValue}</span>
+            <span class={neutralChip}>
+              <Icon name="check" size={14} />
+              {t.thresholds.configured}
+            </span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Why it matters -->
+    <aside class="flex flex-col gap-4 rounded-2xl bg-background-dark p-6 text-surface" data-why={JSON.stringify(t.why)}>
+      <div class="flex flex-col gap-4" aria-live="polite" aria-atomic="true">
+        <span
+          class="self-start rounded-md border border-border-dark px-2.5 py-1 text-xs font-semibold text-on-dark"
+          data-why-tag
+        >
+          {t.why.costs.tag}
+        </span>
+        <p class="text-xl leading-snug font-bold" data-why-title>{t.why.costs.title}</p>
+        <p class="leading-relaxed text-on-dark" data-why-body>{t.why.costs.body}</p>
+      </div>
+      <p class="flex gap-2 border-t border-dark-raised pt-4 text-sm text-on-dark-muted">
+        <Icon name="info-circle" size={18} class="mt-0.5" />
+        {t.sample}
+      </p>
+    </aside>
+  </div>
+
+  <p class="sr-only" aria-live="polite" data-manager-status></p>
+</div>
+
+<script>
+  import { initManagerDashboard } from "../../scripts/manager-dashboard";
+
+  const root = document.querySelector<HTMLElement>("[data-manager-dashboard]");
+  if (root) initManagerDashboard(root);
+</script>

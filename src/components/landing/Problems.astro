@@ -1,0 +1,70 @@
+---
+import Icon from "../ui/Icon.astro";
+import SectionHeader from "../ui/SectionHeader.astro";
+import StatusBadge from "../ui/StatusBadge.astro";
+import type { IconName } from "../ui/icon-names";
+import type { SafetyStatus } from "../../data/landing";
+import { useTranslations, type Lang } from "../../i18n/utils";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang).problems;
+
+// `severity: null` marks a business risk that is not an electrical state.
+const cards: { id: keyof typeof t.cards; icon: IconName; severity: SafetyStatus | null }[] = [
+  { id: "electrocution", icon: "droplet", severity: "danger" },
+  { id: "breakerTrips", icon: "bolt", severity: "warning" },
+  { id: "energyWaste", icon: "premium-rights", severity: "warning" },
+  { id: "audits", icon: "scale", severity: null },
+];
+
+const iconTones = {
+  danger: "bg-danger-soft text-danger",
+  warning: "bg-warning-soft text-warning",
+  neutral: "bg-subtle text-text-primary",
+};
+---
+
+<section id="problem" aria-labelledby="problem-title" class="bg-background py-20 lg:py-28">
+  <div class="container-page flex flex-col gap-12 lg:gap-14">
+    <SectionHeader id="problem-title" eyebrow={t.eyebrow} title={t.title} intro={t.intro} />
+
+    <ul class="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+      {
+        cards.map(({ id, icon, severity }) => {
+          const card = t.cards[id];
+          return (
+            <li class="reveal flex flex-col gap-4 rounded-2xl border border-border bg-surface p-6 lg:p-7">
+              <span
+                class:list={[
+                  "flex size-12 items-center justify-center rounded-xl",
+                  iconTones[severity === "danger" || severity === "warning" ? severity : "neutral"],
+                ]}
+              >
+                <Icon name={icon} size={24} />
+              </span>
+              <h3 class="text-xl leading-snug font-semibold text-balance">{card.title}</h3>
+              <p class="leading-relaxed text-text-secondary">{card.body}</p>
+              <p class="border-t border-border pt-4 text-[0.9375rem] leading-relaxed">
+                <strong class="font-semibold">{t.consequenceLabel}:</strong> {card.consequence}
+              </p>
+              <div class="mt-auto pt-1">
+                {severity ? (
+                  <StatusBadge status={severity} label={card.tag} />
+                ) : (
+                  <span class="inline-flex items-center gap-1.5 rounded-md border border-border bg-subtle px-2.5 py-1 text-[0.8125rem] font-semibold tracking-wide text-text-primary uppercase">
+                    <Icon name="scale" size={16} />
+                    {card.tag}
+                  </span>
+                )}
+              </div>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</section>

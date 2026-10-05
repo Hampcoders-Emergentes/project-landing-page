@@ -1,0 +1,30 @@
+---
+interface Props {
+  /** Id of the `<h2>`; the section references it with aria-labelledby. */
+  id: string;
+  eyebrow: string;
+  title: string;
+  intro?: string;
+  align?: "left" | "center";
+  class?: string;
+}
+
+const { id, eyebrow, title, intro, align = "left", class: className } = Astro.props;
+---
+
+<div
+  class:list={[
+    "flex max-w-3xl flex-col gap-4",
+    align === "center" && "mx-auto items-center text-center",
+    className,
+  ]}
+>
+  <p class="eyebrow text-primary">{eyebrow}</p>
+  <h2
+    id={id}
+    class="text-3xl leading-tight font-bold tracking-tight text-balance sm:text-4xl lg:text-[2.625rem]"
+  >
+    {title}
+  </h2>
+  {intro && <p class="text-lg leading-relaxed text-pretty text-text-secondary">{intro}</p>}
+</div>

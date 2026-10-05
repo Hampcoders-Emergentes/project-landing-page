@@ -1,0 +1,133 @@
+---
+import Icon from "../ui/Icon.astro";
+import { useTranslations, type Lang } from "../../i18n/utils";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang).notices;
+
+const noticeClass =
+  "pointer-events-auto w-full rounded-xl border border-border bg-surface p-4 text-text-primary shadow-[0_16px_40px_-12px_rgb(11_34_57/0.45)]";
+const iconTileClass = "flex size-10 shrink-0 items-center justify-center rounded-lg bg-subtle";
+const smallButton = "btn min-h-10 px-3.5 text-sm";
+---
+
+<div
+  class="pointer-events-none fixed inset-x-3 bottom-3 z-60 flex flex-col items-end gap-3 sm:inset-x-auto sm:right-5 sm:bottom-5 sm:w-104"
+>
+  <!-- Web app unreachable (US01 · scenario 3, US04 · scenario 3, US06 · scenario 3) -->
+  <section
+    hidden
+    aria-labelledby="notice-webapp-title"
+    class={noticeClass}
+    data-webapp-notice
+    data-msg-checking={t.webApp.checking}
+    data-msg-failure={`${t.webApp.title}. ${t.webApp.body}`}
+  >
+    <div class="flex gap-3">
+      <span class={iconTileClass}><Icon name="alert-circle" size={22} /></span>
+      <div class="min-w-0 flex-1">
+        <h2 id="notice-webapp-title" class="font-semibold">{t.webApp.title}</h2>
+        <p class="mt-1 text-sm leading-relaxed text-text-secondary">{t.webApp.body}</p>
+        <div class="mt-3 flex flex-wrap gap-2">
+          <button type="button" class:list={[smallButton, "btn-primary"]} data-webapp-retry>
+            <Icon name="refresh" size={18} />
+            {t.webApp.retry}
+          </button>
+          <button type="button" class:list={[smallButton, "btn-outline"]} data-notice-dismiss>
+            {t.webApp.dismiss}
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Offline -->
+  <section
+    hidden
+    aria-labelledby="notice-offline-title"
+    class={noticeClass}
+    data-offline-notice
+    data-msg={`${t.offline.title}. ${t.offline.body}`}
+  >
+    <div class="flex gap-3">
+      <span class={iconTileClass}><Icon name="wifi-off" size={22} /></span>
+      <div class="min-w-0 flex-1">
+        <h2 id="notice-offline-title" class="font-semibold">{t.offline.title}</h2>
+        <p class="mt-1 text-sm leading-relaxed text-text-secondary">{t.offline.body}</p>
+        <p
+          class="mt-2 text-sm font-medium empty:hidden"
+          data-offline-status
+          data-msg-checking={t.offline.checking}
+          data-msg-still-offline={t.offline.stillOffline}
+          aria-live="polite"
+        >
+        </p>
+        <button type="button" class:list={[smallButton, "btn-outline mt-3"]} data-offline-retry>
+          <Icon name="refresh" size={18} />
+          {t.offline.retry}
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Limited connectivity -->
+  <section
+    hidden
+    aria-labelledby="notice-limited-title"
+    class={noticeClass}
+    data-limited-notice
+    data-msg={`${t.limited.title}. ${t.limited.body}`}
+  >
+    <div class="flex gap-3">
+      <span class={iconTileClass}><Icon name="wifi" size={22} /></span>
+      <div class="min-w-0 flex-1">
+        <h2 id="notice-limited-title" class="font-semibold">{t.limited.title}</h2>
+        <p class="mt-1 text-sm leading-relaxed text-text-secondary">{t.limited.body}</p>
+        <button type="button" class:list={[smallButton, "btn-outline mt-3"]} data-notice-dismiss>
+          {t.limited.dismiss}
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Connection restored -->
+  <p hidden class:list={[noticeClass, "flex items-center gap-3 font-semibold"]} data-restored-notice>
+    <span class={iconTileClass}><Icon name="wifi" size={22} /></span>
+    {t.restored}
+  </p>
+</div>
+
+<p class="sr-only" aria-live="polite" data-announcer="polite"></p>
+<p class="sr-only" aria-live="assertive" data-announcer="assertive"></p>
+
+<script>
+  import { initConnectivity } from "../../scripts/connectivity";
+  import { initWebAppGuard } from "../../scripts/webapp-guard";
+
+  const regions = {
+    polite: document.querySelector<HTMLElement>('[data-announcer="polite"]'),
+    assertive: document.querySelector<HTMLElement>('[data-announcer="assertive"]'),
+  };
+
+  // Clearing first makes screen readers repeat an identical message.
+  const announce = (message: string, politeness: "polite" | "assertive" = "polite") => {
+    const region = regions[politeness];
+    if (!region || !message) return;
+    region.textContent = "";
+    window.setTimeout(() => {
+      region.textContent = message;
+    }, 50);
+  };
+
+  const webAppNotice = document.querySelector<HTMLElement>("[data-webapp-notice]");
+  const offline = document.querySelector<HTMLElement>("[data-offline-notice]");
+  const limited = document.querySelector<HTMLElement>("[data-limited-notice]");
+  const restored = document.querySelector<HTMLElement>("[data-restored-notice]");
+
+  if (webAppNotice) initWebAppGuard({ notice: webAppNotice, announce });
+  if (offline && limited && restored) initConnectivity({ offline, limited, restored, announce });
+</script>
