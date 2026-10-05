@@ -34,6 +34,11 @@ interface NavGroup {
 const onSegments = route === "segments";
 const segmentsPath = getRoutePath("segments", lang);
 
+// Typed helper: an inline `cond ? { [attr]: value } : {}` widens to `{ attr?: undefined }`,
+// which is not assignable to `Record<string, string>`.
+const dataAttr = (enabled: boolean, name: string, value: string): Record<string, string> =>
+  enabled ? { [name]: value } : {};
+
 const groups: NavGroup[] = [
   {
     id: "platform",
@@ -51,7 +56,7 @@ const groups: NavGroup[] = [
     ).map((item) => ({
       ...item,
       href: sectionHref(route, lang, item.id),
-      attrs: route === "home" ? { "data-nav-link": item.id } : {},
+      attrs: dataAttr(route === "home", "data-nav-link", item.id),
     })),
   },
   {
@@ -71,7 +76,7 @@ const groups: NavGroup[] = [
     ).map((item) => ({
       ...item,
       href: onSegments ? `#${item.id}` : `${segmentsPath}#${item.id}`,
-      attrs: onSegments ? { "data-role-link": item.id } : {},
+      attrs: dataAttr(onSegments, "data-role-link", item.id),
     })),
   },
 ];
